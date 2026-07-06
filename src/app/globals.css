@@ -229,7 +229,30 @@ select {
 .hero-model-caption i { width: 6px; height: 6px; border-radius: 50%; background: #76e6bd; box-shadow: 0 0 14px #76e6bd; animation: modelPulse 2s ease-in-out infinite; }
 .hero-model-caption strong { color: rgba(255,255,255,.78); font-weight: 500; }
 
+.hero-model-title {
+  position: absolute;
+  z-index: 3;
+  top: 88px;
+  right: 24px;
+  display: flex;
+  max-width: 170px;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  animation: modelTitleIn .65s ease both;
+  pointer-events: none;
+}
+.hero-model-title span { color: #d6b25e; font: 500 9px/1 var(--font-mono); letter-spacing: .18em; }
+.hero-model-title strong { margin-top: 9px; color: white; font: 600 16px/1.2 var(--font-sora); }
+.hero-model-title small { margin-top: 6px; color: rgba(255,255,255,.5); font-size: 10px; letter-spacing: .06em; }
+.hero-model-loading { color: rgba(255,255,255,.65); font: 500 9px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; }
+.hero-model-progress { position: absolute; z-index: 3; left: 24px; right: 24px; bottom: 0; height: 2px; transform-origin: left; background: linear-gradient(90deg, #4f8cff, #d6b25e); opacity: .75; }
+.hero-model-progress[data-phase="hold"] { animation: modelProgress 5.2s linear both; }
+.hero-model-progress[data-phase="enter"], .hero-model-progress[data-phase="exit"] { transform: scaleX(0); }
+
 @keyframes modelPulse { 50% { opacity: .35; transform: scale(.75); } }
+@keyframes modelProgress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes modelTitleIn { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: translateX(0); } }
 
 @media (max-width: 1100px) { .hero-model-shell { height: 500px; } }
 @media (prefers-reduced-motion: reduce) { .hero-model-caption i { animation: none; } }
