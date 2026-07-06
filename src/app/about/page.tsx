@@ -1,7 +1,7 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Box, Code2, Layers3, Sparkles } from "lucide-react";
 import { GitHubMark } from "@/components/github-mark";
+import { AboutPortrait } from "@/components/about-portrait";
 
 const experience = [
   "Fintech & cryptocurrency products",
@@ -17,24 +17,7 @@ export default function AboutPage() {
     <main className="relative overflow-hidden">
       <section className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:px-10 lg:py-28">
         <div className="grid items-center gap-14 lg:grid-cols-[0.46fr_0.54fr] lg:gap-20">
-          <div className="relative mx-auto w-full max-w-[510px]">
-            <div className="absolute -inset-10 -z-10 rounded-full bg-[#4f8cff]/10 blur-[90px]" />
-            <div className="group relative aspect-[4/5] overflow-hidden rounded-[2.5rem] bg-[radial-gradient(circle_at_45%_24%,_rgba(79,140,255,0.2),_transparent_34%),linear-gradient(145deg,_#181a20,_#08090b)] shadow-[0_36px_100px_rgba(0,0,0,0.4)]">
-              <Image
-                src="/new%20brandlogo2.png"
-                alt="Portrait placeholder for John Solace"
-                fill
-                priority
-                sizes="(max-width: 1024px) 90vw, 42vw"
-                className="object-contain p-[22%] opacity-90 transition-transform duration-700 group-hover:scale-[1.025]"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-              <div className="absolute bottom-7 left-7 right-7">
-                <p className="font-[family-name:var(--font-sora)] text-xl font-semibold text-white">John Solace</p>
-                <p className="mt-2 text-xs uppercase tracking-[0.2em] text-white/50">Software engineer · Product designer · 3D creator</p>
-              </div>
-            </div>
-          </div>
+          <AboutPortrait />
 
           <div>
             <p className="text-sm uppercase tracking-[0.3em] text-[#d6b25e]">The Developer Behind the Work</p>

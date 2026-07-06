@@ -51,17 +51,20 @@ export function PersonalStory() {
           onMouseLeave={resetPointer}
           className="relative mx-auto w-full max-w-[500px]"
         >
-          <motion.div style={{ x: smoothX, y: smoothY }} className="group relative aspect-[4/5] overflow-hidden rounded-[2.5rem] bg-[radial-gradient(circle_at_40%_25%,_rgba(79,140,255,0.22),_transparent_36%),linear-gradient(145deg,_#17191e,_#090a0c)] shadow-[0_35px_100px_rgba(0,0,0,0.36)] transition-shadow duration-700 hover:shadow-[0_45px_120px_rgba(0,0,0,0.48)]">
-            <div className="absolute inset-x-[12%] bottom-[7%] top-[12%] rounded-full bg-[#4f8cff]/10 blur-[55px] transition-opacity duration-700 group-hover:opacity-80" />
-            <Image
-              src="/new%20brandlogo2.png"
-              alt="John Solace — the person behind the work"
-              fill
-              sizes="(max-width: 1024px) 90vw, 42vw"
-              className="object-contain p-[21%] opacity-90 transition duration-700 ease-out group-hover:scale-[1.02]"
-            />
-            <div className="absolute inset-0 bg-[linear-gradient(to_top,_rgba(5,6,8,0.82),_transparent_38%)]" />
-            <div className="absolute bottom-7 left-7 right-7 flex items-end justify-between gap-4">
+          <motion.div style={{ x: smoothX, y: smoothY }} className="group relative aspect-[4/5] overflow-visible">
+            <motion.div animate={{ opacity: [0.3, 0.58, 0.3], scale: [0.95, 1.06, 0.95] }} transition={{ duration: 7.5, repeat: Infinity, ease: "easeInOut" }} className="absolute inset-x-[17%] bottom-[10%] h-[54%] rounded-full bg-[#4f8cff]/18 blur-[65px]" />
+            <div className="absolute inset-x-[18%] bottom-[2%] h-[16%] rounded-full bg-black/50 blur-[30px]" />
+            <div className="absolute inset-x-[27%] bottom-[6%] h-[13%] rounded-full bg-black/35 blur-[52px]" />
+            <motion.div animate={{ y: [0, -6, 0] }} transition={{ duration: 6.8, repeat: Infinity, ease: "easeInOut" }} className="absolute -inset-[7%] transition-transform duration-700 ease-out group-hover:scale-[1.018]">
+              <Image
+                src="/1wd.png"
+                alt="John Solace — the person behind the work"
+                fill
+                sizes="(max-width: 1024px) 94vw, 44vw"
+                className="translate-x-[-7%] scale-[1.12] object-contain drop-shadow-[0_30px_45px_rgba(0,0,0,0.3)]"
+              />
+            </motion.div>
+            <div className="absolute bottom-4 left-2 right-2 flex items-end justify-between gap-4 bg-gradient-to-t from-[#070707]/75 via-[#070707]/30 to-transparent px-5 pb-4 pt-16">
               <div>
                 <p className="text-lg font-semibold text-white">John Solace</p>
                 <p className="mt-1 text-xs uppercase tracking-[0.2em] text-white/50">Engineer · Designer · Storyteller</p>
