@@ -88,7 +88,7 @@ export function PersonalStory() {
             </p>
             <p className="font-medium text-white/90">Over the years, I discovered that the most meaningful digital products are built where science meets art.</p>
             <p>
-              Today, I bring that perspective to fintech, e-commerce, cryptocurrency, e-learning, immersive 3D worlds, Web3, and NFT platforms. I design and develop digital products that don&apos;t just function—they inspire confidence, simplify complex operations, and create lasting value for the businesses behind them.
+              Today, I design and develop websites, software platforms, mobile applications, and immersive digital experiences that don&apos;t just function—they inspire confidence, simplify complex operations, and create lasting value for the businesses behind them.
             </p>
             <p>
               Every project is an opportunity to transform an ambitious idea into something people can use, trust, and grow with. Whether it&apos;s a startup building its first platform, a real estate company reimagining the customer journey, or an established organization preparing for its next stage of growth, my goal remains the same: to create digital systems that are thoughtfully designed, technically resilient, and built to stand the test of time.
