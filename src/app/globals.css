@@ -158,8 +158,8 @@ select {
 
 .hero-model-shell {
   position: relative;
-  width: min(100%, 520px);
-  height: 560px;
+  width: min(100%, 660px);
+  height: 640px;
   overflow: visible;
   background:
     radial-gradient(circle at 22% 18%, rgba(79, 140, 255, 0.22), transparent 34%),
@@ -167,6 +167,9 @@ select {
   box-shadow: none;
   isolation: isolate;
 }
+
+.hero-model-shell canvas { cursor: grab; touch-action: none; }
+.hero-model-shell canvas:active { cursor: grabbing; }
 
 .hero-model-shadow { position: absolute; pointer-events: none; border-radius: 50%; filter: blur(38px); }
 .hero-model-shadow-one { width: 68%; height: 18%; left: 16%; bottom: 14%; background: rgba(0,0,0,.42); transform: rotate(-3deg); }
@@ -228,5 +231,5 @@ select {
 @keyframes modelPulse { 50% { opacity: .35; transform: scale(.75); } }
 @keyframes modelTitleIn { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: translateX(0); } }
 
-@media (max-width: 1100px) { .hero-model-shell { height: 500px; } }
+@media (max-width: 1250px) { .hero-model-shell { height: 580px; } }
 @media (prefers-reduced-motion: reduce) { .hero-model-caption i { animation: none; } }

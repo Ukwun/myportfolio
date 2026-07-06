@@ -94,14 +94,14 @@ export default function HomePage() {
           transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
           className="absolute bottom-[10%] right-[8%] h-56 w-56 rounded-full bg-[#d6b25e]/10 blur-3xl"
         />
-        <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1.15fr_0.85fr]">
+        <div className="mx-auto grid max-w-[1400px] items-center gap-8 lg:grid-cols-[0.9fr_1.1fr]">
           <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#d6b25e]/30 bg-[#111111]/80 px-3 py-2 text-sm text-[#d6b25e]">
               <Sparkles size={15} />
               Digital strategy • premium product design • software delivery
             </div>
-            <h1 className="max-w-2xl font-[family-name:var(--font-sora)] text-4xl font-semibold leading-[0.95] sm:text-5xl lg:text-6xl">
-              Premium digital systems.
+            <h1 className="max-w-3xl font-[family-name:var(--font-sora)] text-4xl font-semibold leading-[1.02] sm:text-5xl lg:text-[3.45rem]">
+              I build high-end digital systems that combine software engineering, product design, and 3D visual storytelling.
             </h1>
             <p className="mt-6 max-w-xl text-lg leading-8 text-white/70">
               Strategy, product design, and platform delivery for ambitious teams.

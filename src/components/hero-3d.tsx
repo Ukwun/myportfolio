@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment, Float, Html, Lightformer, PresentationControls, useGLTF } from "@react-three/drei";
+import { Environment, Float, Html, Lightformer, OrbitControls, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
 type Phase = "enter" | "hold" | "exit";
@@ -51,7 +51,7 @@ function ShowcaseModel({ url, phase, hidden }: { url: string; phase: Phase; hidd
     const center = bounds.getCenter(new THREE.Vector3());
     const size = bounds.getSize(new THREE.Vector3());
     const largestDimension = Math.max(size.x, size.y, size.z) || 1;
-    const normalizedScale = 2.7 / largestDimension;
+    const normalizedScale = 3.15 / largestDimension;
 
     clone.scale.setScalar(normalizedScale);
     clone.position.set(-center.x * normalizedScale, -center.y * normalizedScale, -center.z * normalizedScale);
@@ -134,17 +134,28 @@ export function Hero3D() {
     <div className="hero-model-shell" aria-label="Live rotating showcase of branded 3D work">
       <div className="hero-model-shadow hero-model-shadow-one" />
       <div className="hero-model-shadow hero-model-shadow-two" />
-      <Canvas shadows dpr={[1, 1.6]} camera={{ position: [0, 0.05, 6.2], fov: 34 }} gl={{ antialias: true, alpha: true }}>
+      <Canvas shadows dpr={[1, 1.6]} camera={{ position: [0, 0.05, 6.4], fov: 32 }} gl={{ antialias: true, alpha: true }}>
         <ambientLight intensity={0.65} />
         <spotLight position={[4, 6, 5]} angle={0.38} penumbra={0.9} intensity={85} castShadow shadow-bias={-0.0001} />
         <pointLight position={[-3.5, 0.5, 2]} color="#4f8cff" intensity={22} distance={8} />
         <pointLight position={[3, -1, 1]} color="#d6b25e" intensity={16} distance={7} />
 
-        <PresentationControls global polar={[-0.12, 0.12]} azimuth={[-0.3, 0.3]} damping={0.18} snap>
-          <Suspense fallback={<LoadingModel />}>
-            <ShowcaseModel key={activeModel.url} url={activeModel.url} phase={phase} hidden={activeModel.hidden} />
-          </Suspense>
-        </PresentationControls>
+        <Suspense fallback={<LoadingModel />}>
+          <ShowcaseModel key={activeModel.url} url={activeModel.url} phase={phase} hidden={activeModel.hidden} />
+        </Suspense>
+        <OrbitControls
+          makeDefault
+          enablePan={false}
+          enableZoom
+          zoomSpeed={1.15}
+          rotateSpeed={0.72}
+          minDistance={3.7}
+          maxDistance={8.2}
+          minPolarAngle={Math.PI * 0.28}
+          maxPolarAngle={Math.PI * 0.72}
+          dampingFactor={0.075}
+          enableDamping
+        />
 
         <Html position={[-1.48, 1.35, 0]} center transform distanceFactor={7.5} style={{ pointerEvents: "none" }}>
           <div className="hero-model-mark">
