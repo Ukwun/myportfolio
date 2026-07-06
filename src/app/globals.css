@@ -51,12 +51,30 @@ html[data-theme="light"] .site-root [class*="bg-[#111111]"],
 html[data-theme="light"] .site-root [class*="bg-[#0f0f10]"],
 html[data-theme="light"] .site-root [class*="bg-[#070707]"] { background-color: rgba(255,255,255,.72) !important; }
 html[data-theme="light"] .site-root [class*="bg-white/"] { background-color: rgba(255,255,255,.55) !important; }
+html[data-theme="light"] .site-root [class*="bg-black"] { background-color: rgba(255,255,255,.52) !important; }
+html[data-theme="light"] .site-root [class*="bg-[linear-gradient"] { background-image: linear-gradient(135deg,rgba(255,255,255,.82),rgba(239,235,226,.7)) !important; background-color: transparent !important; }
+html[data-theme="light"] .site-root [class*="bg-[radial-gradient"] { background-image: radial-gradient(circle at top left,rgba(79,140,255,.12),transparent 42%),linear-gradient(135deg,rgba(255,255,255,.8),rgba(239,235,226,.68)) !important; }
 html[data-theme="light"] .site-root header { background-color: rgba(248,246,241,.86) !important; }
 html[data-theme="light"] .project-card { background: rgba(255,255,255,.74) !important; box-shadow: 0 22px 70px rgba(50,54,65,.12) !important; }
 html[data-theme="light"] .project-rail-control { color: #242832; background: rgba(255,255,255,.8); box-shadow: 0 10px 30px rgba(50,54,65,.12); }
 html[data-theme="light"] .btn-primary { color: #15171c; background: linear-gradient(135deg,#fffdf8,#eee9de); box-shadow: 0 12px 34px rgba(65,72,88,.14),0 0 30px rgba(214,178,94,.12); }
 html[data-theme="light"] .btn-secondary { color: #262a33; border-color: rgba(25,29,38,.14); background: rgba(255,255,255,.52); }
 html[data-theme="light"] footer { background: rgba(255,255,255,.24) !important; }
+html[data-theme="light"] .site-root input,
+html[data-theme="light"] .site-root select,
+html[data-theme="light"] .site-root textarea { color: #1d2129 !important; background: rgba(255,255,255,.72) !important; border-color: rgba(29,33,41,.13) !important; }
+html[data-theme="light"] .site-root input::placeholder,
+html[data-theme="light"] .site-root textarea::placeholder { color: rgba(29,33,41,.42) !important; }
+html[data-theme="light"] .site-root option { color: #1d2129 !important; background: #fffdf8 !important; }
+html[data-theme="light"] .portrait-caption { background-image: linear-gradient(to top,rgba(244,241,234,.94),rgba(244,241,234,.45),transparent) !important; }
+html[data-theme="light"] .portrait-name { color: #15171c !important; }
+html[data-theme="light"] .portrait-role { color: rgba(21,23,28,.62) !important; }
+html[data-theme="light"] .hero-model-mark { color: #15171c; background: rgba(255,255,255,.78); box-shadow: 0 12px 36px rgba(50,54,65,.12); }
+html[data-theme="light"] .hero-model-caption { color: rgba(21,23,28,.56); }
+html[data-theme="light"] .hero-model-caption strong,
+html[data-theme="light"] .hero-model-title strong { color: rgba(21,23,28,.84); }
+html[data-theme="light"] .hero-model-title small,
+html[data-theme="light"] .hero-model-loading { color: rgba(21,23,28,.56); }
 
 body::before {
   content: "";

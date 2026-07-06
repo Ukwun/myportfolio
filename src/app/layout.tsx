@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Sora, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { SiteShell } from "@/components/site-shell";
+import { SiteAnalytics } from "@/components/site-analytics";
 
 const sora = Sora({ subsets: ["latin"], variable: "--font-sora" });
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -16,6 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning className={`${sora.variable} ${inter.variable} ${mono.variable} h-full antialiased`}>
       <body className="min-h-full bg-[#070707] text-[#f5f5f5]">
+        <SiteAnalytics />
         <SiteShell>{children}</SiteShell>
       </body>
     </html>

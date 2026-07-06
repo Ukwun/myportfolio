@@ -3,6 +3,8 @@ export type VisitorFocus = "website" | "platform" | "mobile" | "growth";
 export type VisitorProfile = {
   name: string;
   company: string;
+  email: string;
+  phone: string;
   focus: VisitorFocus | "";
   activityCount: number;
   lastSeen: string;
@@ -15,6 +17,8 @@ const ACTIVITY_KEY = "john-solace-activity-log";
 const defaultProfile = (): VisitorProfile => ({
   name: "",
   company: "",
+  email: "",
+  phone: "",
   focus: "",
   activityCount: 0,
   lastSeen: new Date().toISOString(),
@@ -38,6 +42,8 @@ export function readVisitorProfile(): VisitorProfile {
       ...parsed,
       name: parsed.name ?? "",
       company: parsed.company ?? "",
+      email: parsed.email ?? "",
+      phone: parsed.phone ?? "",
       focus: parsed.focus ?? "",
       activityCount: parsed.activityCount ?? 0,
     };

@@ -23,14 +23,19 @@ const focusOptions: Array<{ value: VisitorFocus | ""; label: string }> = [
 export function LiveIntake() {
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [focus, setFocus] = useState<VisitorFocus | "">("");
   const [ready, setReady] = useState(false);
   const [activity, setActivity] = useState<Array<{ id: string; event: string; detail: string; timestamp: string }>>([]);
+  const [submitState, setSubmitState] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
   useEffect(() => {
     const profile = readVisitorProfile();
     setName(profile.name);
     setCompany(profile.company);
+    setEmail(profile.email);
+    setPhone(profile.phone);
     setFocus(profile.focus as VisitorFocus | "");
     setActivity(readVisitorActivity());
   }, []);
@@ -38,21 +43,39 @@ export function LiveIntake() {
   const headline = useMemo(() => {
     const profile = readVisitorProfile();
     return getProfileHeadline(profile);
-  }, [ready, name, company, focus]);
+  }, [ready, name, company, email, phone, focus]);
 
-  function handleSubmit(event: React.FormEvent) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setSubmitState("sending");
     const nextProfile = saveVisitorProfile({
       ...readVisitorProfile(),
       name,
       company,
+      email,
+      phone,
       focus: focus || "",
     });
-    recordVisitorActivity("intake-complete", `${company || "a new visitor"} selected ${focus || "a direction"}`);
+    recordVisitorActivity("lead-captured", `${company || email} selected ${focus || "a direction"}`);
     setActivity(readVisitorActivity());
     setReady(Boolean(name || company || focus));
     if (nextProfile.name || nextProfile.company || nextProfile.focus) {
       setReady(true);
+    }
+
+    const lead = { name, company, email, phone, focus, source: "Live visitor intelligence", submittedAt: new Date().toISOString() };
+    const netlifyPayload = new URLSearchParams({ "form-name": "visitor-intelligence", ...lead });
+
+    try {
+      const results = await Promise.allSettled([
+        fetch("/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: netlifyPayload.toString() }),
+        fetch("/.netlify/functions/lead-alert", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(lead) }),
+      ]);
+      const stored = results[0].status === "fulfilled" && results[0].value.ok;
+      setSubmitState(stored ? "sent" : "error");
+      if (stored) window.dispatchEvent(new CustomEvent("portfolio:lead", { detail: { focus } }));
+    } catch {
+      setSubmitState("error");
     }
   }
 
@@ -75,11 +98,16 @@ export function LiveIntake() {
           </div>
 
           <div className="rounded-[1.5rem] border border-white/10 bg-black/20 p-5">
-            <form className="space-y-4" onSubmit={handleSubmit}>
+            <form name="visitor-intelligence" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" className="space-y-4" onSubmit={handleSubmit}>
+              <input type="hidden" name="form-name" value="visitor-intelligence" />
+              <input type="hidden" name="bot-field" />
               <div>
                 <label className="mb-2 block text-sm text-white/70">Your name</label>
                 <input
                   value={name}
+                  name="name"
+                  required
+                  autoComplete="name"
                   onChange={(event) => setName(event.target.value)}
                   className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none ring-0 transition focus:border-[#4f8cff]/45"
                   placeholder="Alicia Thompson"
@@ -89,15 +117,28 @@ export function LiveIntake() {
                 <label className="mb-2 block text-sm text-white/70">Company</label>
                 <input
                   value={company}
+                  name="company"
                   onChange={(event) => setCompany(event.target.value)}
                   className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none ring-0 transition focus:border-[#4f8cff]/45"
                   placeholder="Northstar Labs"
                 />
               </div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="mb-2 block text-sm text-white/70">Email address</label>
+                  <input type="email" name="email" value={email} onChange={(event) => setEmail(event.target.value)} required autoComplete="email" className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/35 focus:border-[#4f8cff]/45" placeholder="you@company.com" />
+                </div>
+                <div>
+                  <label className="mb-2 block text-sm text-white/70">Phone number</label>
+                  <input type="tel" name="phone" value={phone} onChange={(event) => setPhone(event.target.value)} required autoComplete="tel" className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition placeholder:text-white/35 focus:border-[#4f8cff]/45" placeholder="+234 800 000 0000" />
+                </div>
+              </div>
               <div>
                 <label className="mb-2 block text-sm text-white/70">Primary need</label>
                 <select
                   value={focus}
+                  name="focus"
+                  required
                   onChange={(event) => setFocus(event.target.value as VisitorFocus | "")}
                   className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none transition focus:border-[#4f8cff]/45"
                 >
@@ -108,9 +149,11 @@ export function LiveIntake() {
                   ))}
                 </select>
               </div>
-              <button type="submit" className="btn-primary">
-                Activate the experience <ArrowRight size={15} />
+              <p className="text-xs leading-5 text-white/45">By submitting, you agree that I may contact you about your project. Your details are securely captured through Netlify.</p>
+              <button type="submit" disabled={submitState === "sending"} className="btn-primary disabled:cursor-wait disabled:opacity-60">
+                {submitState === "sending" ? "Securing your details…" : submitState === "sent" ? "Details received" : "Activate the experience"} <ArrowRight size={15} />
               </button>
+              {submitState === "error" ? <p className="text-sm text-[#ff8a75]">Your profile was saved locally, but the secure lead submission needs another try.</p> : null}
             </form>
 
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-5 rounded-[1.2rem] border border-white/10 bg-white/5 p-4">

@@ -1,5 +1,15 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Production lead notifications and analytics
+
+The site stores `visitor-intelligence` submissions in Netlify Forms and includes an owner-alert function. Configure these variables in **Netlify → Site configuration → Environment variables**:
+
+- `RESEND_API_KEY`: server-only Resend API key used by the lead-alert function.
+- `LEAD_FROM_EMAIL`: optional verified sender, for example `Portfolio <leads@yourdomain.com>`. Until a domain is verified, the function uses Resend's onboarding sender.
+- `NEXT_PUBLIC_GA_MEASUREMENT_ID`: GA4 measurement ID such as `G-XXXXXXXXXX`; this enables real-time visitors, page views, and `generate_lead` conversion events.
+
+The notification recipient is fixed server-side to `solaceinterlude@gmail.com`. As an additional delivery path, enable **Netlify Forms → Form notifications → Email notification** for the `visitor-intelligence` form and use the same owner address.
+
 ## Getting Started
 
 First, run the development server:

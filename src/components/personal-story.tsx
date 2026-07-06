@@ -51,7 +51,7 @@ export function PersonalStory() {
           onMouseLeave={resetPointer}
           className="relative mx-auto w-full max-w-[500px]"
         >
-          <motion.div style={{ x: smoothX, y: smoothY }} className="group relative aspect-[4/5] overflow-visible">
+          <motion.div style={{ x: smoothX, y: smoothY }} className="group relative aspect-[4/5] scale-[1.12] overflow-visible lg:origin-right">
             <motion.div animate={{ opacity: [0.3, 0.58, 0.3], scale: [0.95, 1.06, 0.95] }} transition={{ duration: 7.5, repeat: Infinity, ease: "easeInOut" }} className="absolute inset-x-[17%] bottom-[10%] h-[54%] rounded-full bg-[#4f8cff]/18 blur-[65px]" />
             <div className="absolute inset-x-[18%] bottom-[2%] h-[16%] rounded-full bg-black/50 blur-[30px]" />
             <div className="absolute inset-x-[27%] bottom-[6%] h-[13%] rounded-full bg-black/35 blur-[52px]" />
@@ -64,10 +64,10 @@ export function PersonalStory() {
                 className="translate-x-[-7%] scale-[1.12] object-contain drop-shadow-[0_30px_45px_rgba(0,0,0,0.3)]"
               />
             </motion.div>
-            <div className="absolute bottom-4 left-2 right-2 flex items-end justify-between gap-4 bg-gradient-to-t from-[#070707]/75 via-[#070707]/30 to-transparent px-5 pb-4 pt-16">
+            <div className="portrait-caption absolute bottom-4 left-2 right-2 flex items-end justify-between gap-4 bg-gradient-to-t from-[#070707]/75 via-[#070707]/30 to-transparent px-5 pb-4 pt-16">
               <div>
-                <p className="text-lg font-semibold text-white">John Solace</p>
-                <p className="mt-1 text-xs uppercase tracking-[0.2em] text-white/50">Engineer · Designer · Storyteller</p>
+                <p className="portrait-name text-lg font-semibold text-white">John Solace</p>
+                <p className="portrait-role mt-1 text-xs uppercase tracking-[0.2em] text-white/50">Engineer · Designer · Storyteller</p>
               </div>
               <span className="h-2 w-2 rounded-full bg-[#76e6bd] shadow-[0_0_18px_#76e6bd]" />
             </div>
