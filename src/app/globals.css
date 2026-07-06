@@ -231,5 +231,10 @@ select {
 @keyframes modelPulse { 50% { opacity: .35; transform: scale(.75); } }
 @keyframes modelTitleIn { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: translateX(0); } }
 
+@keyframes storyGlow {
+  0%, 100% { opacity: .45; transform: translate3d(0, 0, 0) scale(1); }
+  50% { opacity: .85; transform: translate3d(-14px, 10px, 0) scale(1.08); }
+}
+
 @media (max-width: 1250px) { .hero-model-shell { height: 580px; } }
 @media (prefers-reduced-motion: reduce) { .hero-model-caption i { animation: none; } }

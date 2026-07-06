@@ -7,6 +7,7 @@ import { InteractiveServiceStudio } from "@/components/interactive-service-studi
 import { LiveIntake } from "@/components/live-intake";
 import { TrustScene } from "@/components/trust-scene";
 import { Hero3D } from "@/components/hero-3d";
+import { PersonalStory } from "@/components/personal-story";
 
 const whatsappNumber = "2348059085207";
 
@@ -183,6 +184,8 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
+      <PersonalStory />
 
       <InteractiveServiceStudio />
 
