@@ -160,46 +160,24 @@ select {
   position: relative;
   width: min(100%, 520px);
   height: 560px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.11);
-  border-radius: 2.25rem;
+  overflow: visible;
   background:
     radial-gradient(circle at 22% 18%, rgba(79, 140, 255, 0.22), transparent 34%),
-    radial-gradient(circle at 78% 72%, rgba(214, 178, 94, 0.13), transparent 32%),
-    linear-gradient(145deg, rgba(20, 22, 27, 0.98), rgba(5, 6, 8, 0.98));
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 42px 100px rgba(0,0,0,.5), 0 0 70px rgba(79,140,255,.1);
+    radial-gradient(circle at 78% 72%, rgba(214, 178, 94, 0.13), transparent 32%);
+  box-shadow: none;
   isolation: isolate;
 }
 
-.hero-model-shell::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  border-radius: inherit;
-  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.55);
-}
-
-.hero-model-grid {
-  position: absolute;
-  inset: 42% -20% -25%;
-  transform: perspective(320px) rotateX(58deg);
-  background-image: linear-gradient(rgba(255,255,255,.055) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.055) 1px, transparent 1px);
-  background-size: 34px 34px;
-  mask-image: linear-gradient(to bottom, transparent, black 35%, transparent 90%);
-}
-
-.hero-model-orbit { position: absolute; border: 1px solid rgba(255,255,255,.08); border-radius: 999px; }
-.hero-model-orbit-one { width: 420px; height: 420px; left: -180px; top: -190px; }
-.hero-model-orbit-two { width: 260px; height: 260px; right: -145px; bottom: 35px; border-color: rgba(214,178,94,.15); }
+.hero-model-shadow { position: absolute; pointer-events: none; border-radius: 50%; filter: blur(38px); }
+.hero-model-shadow-one { width: 68%; height: 18%; left: 16%; bottom: 14%; background: rgba(0,0,0,.42); transform: rotate(-3deg); }
+.hero-model-shadow-two { width: 54%; height: 13%; left: 23%; bottom: 17%; background: rgba(79,140,255,.11); filter: blur(48px); transform: rotate(4deg); }
 
 .hero-model-mark {
   display: flex;
   align-items: center;
   gap: 7px;
   padding: 7px 10px 7px 7px;
-  border: 1px solid rgba(255,255,255,.17);
+  border: 0;
   border-radius: 999px;
   color: rgba(255,255,255,.9);
   background: rgba(8,10,14,.74);
@@ -246,12 +224,8 @@ select {
 .hero-model-title strong { margin-top: 9px; color: white; font: 600 16px/1.2 var(--font-sora); }
 .hero-model-title small { margin-top: 6px; color: rgba(255,255,255,.5); font-size: 10px; letter-spacing: .06em; }
 .hero-model-loading { color: rgba(255,255,255,.65); font: 500 9px/1 var(--font-mono); letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; }
-.hero-model-progress { position: absolute; z-index: 3; left: 24px; right: 24px; bottom: 0; height: 2px; transform-origin: left; background: linear-gradient(90deg, #4f8cff, #d6b25e); opacity: .75; }
-.hero-model-progress[data-phase="hold"] { animation: modelProgress 5.2s linear both; }
-.hero-model-progress[data-phase="enter"], .hero-model-progress[data-phase="exit"] { transform: scaleX(0); }
 
 @keyframes modelPulse { 50% { opacity: .35; transform: scale(.75); } }
-@keyframes modelProgress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes modelTitleIn { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: translateX(0); } }
 
 @media (max-width: 1100px) { .hero-model-shell { height: 500px; } }
