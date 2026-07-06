@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import { GitHubMark } from "@/components/github-mark";
 import type { MouseEvent } from "react";
 
 export function PersonalStory() {
@@ -87,7 +88,7 @@ export function PersonalStory() {
             </p>
             <p className="font-medium text-white/90">Over the years, I discovered that the most meaningful digital products are built where science meets art.</p>
             <p>
-              Today, I design and develop websites, software platforms, mobile applications, and immersive digital experiences that don&apos;t just function—they inspire confidence, simplify complex operations, and create lasting value for the businesses behind them.
+              Today, I bring that perspective to fintech, e-commerce, cryptocurrency, e-learning, immersive 3D worlds, Web3, and NFT platforms. I design and develop digital products that don&apos;t just function—they inspire confidence, simplify complex operations, and create lasting value for the businesses behind them.
             </p>
             <p>
               Every project is an opportunity to transform an ambitious idea into something people can use, trust, and grow with. Whether it&apos;s a startup building its first platform, a real estate company reimagining the customer journey, or an established organization preparing for its next stage of growth, my goal remains the same: to create digital systems that are thoughtfully designed, technically resilient, and built to stand the test of time.
@@ -104,6 +105,9 @@ export function PersonalStory() {
               Explore My Projects
               <ArrowUpRight size={16} className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </Link>
+            <a href="https://github.com/Ukwun" target="_blank" rel="noreferrer" aria-label="View John Solace on GitHub" className="flex h-[46px] w-[46px] items-center justify-center self-start rounded-full bg-white/8 text-white/75 shadow-[0_12px_35px_rgba(0,0,0,0.24)] transition hover:-translate-y-1 hover:bg-white/14 hover:text-[#d6b25e]">
+              <GitHubMark className="h-[19px] w-[19px]" />
+            </a>
           </div>
         </motion.div>
       </div>
