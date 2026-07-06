@@ -8,6 +8,7 @@ import { LiveIntake } from "@/components/live-intake";
 import { TrustScene } from "@/components/trust-scene";
 import { Hero3D } from "@/components/hero-3d";
 import { PersonalStory } from "@/components/personal-story";
+import { ProjectRail } from "@/components/project-rail";
 
 const whatsappNumber = "2348059085207";
 
@@ -15,7 +16,7 @@ function whatsappLink(message: string) {
   return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 }
 
-const caseStudies = [
+/*const caseStudies = [
   {
     title: "AfriGO",
     industry: "Digital Trade Operating System",
@@ -43,7 +44,9 @@ const caseStudies = [
     stack: ["Next.js", "WebRTC", "Supabase"],
     value: "Delivered a memorable experience that elevated engagement and perceived quality.",
   },
-];
+];*/
+
+const caseStudies: Array<{ title: string; industry: string; problem: string; solution: string; value: string; stack: string[] }> = [];
 
 const services = [
   {
@@ -143,7 +146,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="case-studies" className="mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:px-10">
+      {/* legacy grid replaced by the interactive project rail */}
+      {false && <section id="legacy-case-studies" className="mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:px-10">
         <div className="mb-6 flex items-end justify-between gap-4">
           <div>
             <p className="text-sm uppercase tracking-[0.3em] text-[#d6b25e]">Selected Outcomes</p>
@@ -183,7 +187,9 @@ export default function HomePage() {
             </motion.article>
           ))}
         </div>
-      </section>
+      </section>}
+
+      <ProjectRail />
 
       <PersonalStory />
 

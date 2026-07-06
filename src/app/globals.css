@@ -23,6 +23,41 @@ body {
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
 }
 
+.site-root { transition: background 500ms ease, color 350ms ease; }
+
+.theme-toggle { display: inline-flex; padding: 3px; border: 0; background: transparent; }
+.theme-toggle-track { position: relative; display: block; width: 52px; height: 29px; border-radius: 999px; background: rgba(255,255,255,.1); box-shadow: inset 0 0 0 1px rgba(255,255,255,.13), 0 8px 24px rgba(0,0,0,.2); transition: background 350ms ease, box-shadow 350ms ease; }
+.theme-toggle-knob { position: absolute; left: 3px; top: 3px; display: grid; width: 23px; height: 23px; place-items: center; border-radius: 50%; color: #d6b25e; background: #15171c; box-shadow: 0 4px 12px rgba(0,0,0,.35); transition: transform 400ms cubic-bezier(.22,1,.36,1), color 300ms ease, background 300ms ease; }
+.theme-toggle-knob svg { width: 14px; height: 14px; }
+.theme-toggle-track[data-active="light"] { background: rgba(214,178,94,.22); }
+.theme-toggle-track[data-active="light"] .theme-toggle-knob { transform: translateX(23px); color: #b18119; background: #fffaf0; }
+
+.project-rail { scrollbar-width: none; overscroll-behavior-inline: contain; cursor: grab; user-select: none; }
+.project-rail[data-dragging="true"] { cursor: grabbing; scroll-snap-type: none; }
+.project-rail::-webkit-scrollbar { display: none; }
+.project-rail-control { display: grid; width: 44px; height: 44px; place-items: center; border: 0; border-radius: 50%; color: rgba(255,255,255,.78); background: rgba(255,255,255,.07); box-shadow: 0 10px 30px rgba(0,0,0,.2); transition: transform 220ms ease, background 220ms ease, color 220ms ease; }
+.project-rail-control:hover { transform: translateY(-2px); color: white; background: rgba(79,140,255,.2); }
+
+html[data-theme="light"] { --background: #f3f0e9; --foreground: #16181d; color-scheme: light; }
+html[data-theme="light"] body::before { background: radial-gradient(circle at top left, rgba(79,140,255,.14), transparent 34%); }
+html[data-theme="light"] .site-root { background: radial-gradient(circle at top left, rgba(79,140,255,.13), transparent 31%), linear-gradient(120deg,#f8f6f1 0%,#eeeae2 52%,#f8f6f1 100%) !important; color: #17191e; }
+html[data-theme="light"] .site-root [class*="text-white"] { color: rgba(28,31,38,.7) !important; }
+html[data-theme="light"] .site-root [class~="text-white"],
+html[data-theme="light"] .site-root h1,
+html[data-theme="light"] .site-root h2,
+html[data-theme="light"] .site-root h3 { color: #15171c !important; }
+html[data-theme="light"] .site-root [class*="border-white"] { border-color: rgba(25,29,38,.1) !important; }
+html[data-theme="light"] .site-root [class*="bg-[#111111]"],
+html[data-theme="light"] .site-root [class*="bg-[#0f0f10]"],
+html[data-theme="light"] .site-root [class*="bg-[#070707]"] { background-color: rgba(255,255,255,.72) !important; }
+html[data-theme="light"] .site-root [class*="bg-white/"] { background-color: rgba(255,255,255,.55) !important; }
+html[data-theme="light"] .site-root header { background-color: rgba(248,246,241,.86) !important; }
+html[data-theme="light"] .project-card { background: rgba(255,255,255,.74) !important; box-shadow: 0 22px 70px rgba(50,54,65,.12) !important; }
+html[data-theme="light"] .project-rail-control { color: #242832; background: rgba(255,255,255,.8); box-shadow: 0 10px 30px rgba(50,54,65,.12); }
+html[data-theme="light"] .btn-primary { color: #15171c; background: linear-gradient(135deg,#fffdf8,#eee9de); box-shadow: 0 12px 34px rgba(65,72,88,.14),0 0 30px rgba(214,178,94,.12); }
+html[data-theme="light"] .btn-secondary { color: #262a33; border-color: rgba(25,29,38,.14); background: rgba(255,255,255,.52); }
+html[data-theme="light"] footer { background: rgba(255,255,255,.24) !important; }
+
 body::before {
   content: "";
   position: fixed;

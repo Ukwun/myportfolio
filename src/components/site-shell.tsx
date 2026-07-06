@@ -60,6 +60,7 @@ function InstagramIcon(props: SVGProps<SVGSVGElement>) {
 export function SiteShell({ children }: { children: React.ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 18);
@@ -68,8 +69,22 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    const saved = window.localStorage.getItem("portfolio-theme");
+    const initial = saved === "light" || saved === "dark" ? saved : window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+    setTheme(initial);
+    document.documentElement.dataset.theme = initial;
+  }, []);
+
+  function toggleTheme() {
+    const next = theme === "dark" ? "light" : "dark";
+    setTheme(next);
+    document.documentElement.dataset.theme = next;
+    window.localStorage.setItem("portfolio-theme", next);
+  }
+
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(79,140,255,0.18),_transparent_32%),linear-gradient(120deg,_#070707_0%,_#0c0c0c_45%,_#070707_100%)] text-[#f5f5f5]">
+    <div className="site-root min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(79,140,255,0.18),_transparent_32%),linear-gradient(120deg,_#070707_0%,_#0c0c0c_45%,_#070707_100%)] text-[#f5f5f5]">
       <header
         className={`sticky top-0 z-50 border-b transition-all duration-300 ${
           isScrolled ? "border-white/10 bg-[#070707]/90 backdrop-blur-xl" : "border-transparent bg-transparent"
@@ -92,6 +107,17 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
           </nav>
 
           <div className="flex items-center gap-3">
+            <button type="button" onClick={toggleTheme} className="theme-toggle" aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`} title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}>
+              <span className="theme-toggle-track" data-active={theme}>
+                <span className="theme-toggle-knob">
+                  {theme === "dark" ? (
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.6 15.1A8.3 8.3 0 0 1 8.9 3.4 8.8 8.8 0 1 0 20.6 15.1Z" fill="currentColor" /></svg>
+                  ) : (
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor" /><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>
+                  )}
+                </span>
+              </span>
+            </button>
             <a
               href={whatsappLink("Hello John, I visited your website and I’m interested in a custom tech project. My estimated budget is above ₦2M and I’d like to discuss scope, timeline, and pricing.")}
               target="_blank"
