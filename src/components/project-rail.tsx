@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import type { PointerEvent, WheelEvent } from "react";
 
-const projects = [
+export const projects = [
   { title: "AfriGO", industry: "Digital Trade Operating System", problem: "Cross-border trade teams needed one reliable system for onboarding, operations, and visibility.", built: "A guided operating layer with automated workflows, team onboarding, customer portals, and reporting.", outcome: "Improved clarity and execution speed across high-volume trade operations.", stack: ["Next.js", "Firebase", "Tailwind"] },
   { title: "NCDF Money", industry: "Fintech Savings & Investment", problem: "The product needed a credible, conversion-focused experience for serious financial users.", built: "Trust-led savings, investment, onboarding, and retention journeys.", outcome: "Strengthened user confidence and premium market positioning.", stack: ["React", "Node.js", "Stripe"] },
   { title: "TAGMI", industry: "Livestream & Community", problem: "Creators and audiences needed a more immersive, premium platform experience.", built: "Creator-first interfaces, live engagement flows, and community experience layers.", outcome: "Elevated engagement, product clarity, and perceived brand quality.", stack: ["Next.js", "WebRTC", "Supabase"] },

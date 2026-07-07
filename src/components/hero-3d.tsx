@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, Float, Html, Lightformer, OrbitControls, useGLTF } from "@react-three/drei";
@@ -157,12 +156,6 @@ export function Hero3D() {
           enableDamping
         />
 
-        <Html position={[-1.48, 1.35, 0]} center transform distanceFactor={7.5} style={{ pointerEvents: "none" }}>
-          <div className="hero-model-mark">
-            <Image src="/new%20brandlogo2.png" alt="" width={22} height={22} />
-            <span>8_GIGABYTES</span>
-          </div>
-        </Html>
         <Environment resolution={256}>
           <Lightformer intensity={3.5} color="white" position={[0, 5, -4]} scale={[6, 2, 1]} />
           <Lightformer intensity={2.4} color="#80aaff" position={[-5, 1, 1]} rotation={[0, Math.PI / 2, 0]} scale={[4, 2, 1]} />

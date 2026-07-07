@@ -69,7 +69,6 @@ html[data-theme="light"] .site-root option { color: #1d2129 !important; backgrou
 html[data-theme="light"] .portrait-caption { background-image: linear-gradient(to top,rgba(244,241,234,.94),rgba(244,241,234,.45),transparent) !important; }
 html[data-theme="light"] .portrait-name { color: #15171c !important; }
 html[data-theme="light"] .portrait-role { color: rgba(21,23,28,.62) !important; }
-html[data-theme="light"] .hero-model-mark { color: #15171c; background: rgba(255,255,255,.78); box-shadow: 0 12px 36px rgba(50,54,65,.12); }
 html[data-theme="light"] .hero-model-caption { color: rgba(21,23,28,.56); }
 html[data-theme="light"] .hero-model-caption strong,
 html[data-theme="light"] .hero-model-title strong { color: rgba(21,23,28,.84); }
@@ -227,23 +226,6 @@ select {
 .hero-model-shadow { position: absolute; pointer-events: none; border-radius: 50%; filter: blur(38px); }
 .hero-model-shadow-one { width: 68%; height: 18%; left: 16%; bottom: 14%; background: rgba(0,0,0,.42); transform: rotate(-3deg); }
 .hero-model-shadow-two { width: 54%; height: 13%; left: 23%; bottom: 17%; background: rgba(79,140,255,.11); filter: blur(48px); transform: rotate(4deg); }
-
-.hero-model-mark {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  padding: 7px 10px 7px 7px;
-  border: 0;
-  border-radius: 999px;
-  color: rgba(255,255,255,.9);
-  background: rgba(8,10,14,.74);
-  box-shadow: 0 12px 36px rgba(0,0,0,.35);
-  backdrop-filter: blur(10px);
-  font: 600 9px/1 var(--font-mono);
-  letter-spacing: .18em;
-  white-space: nowrap;
-}
-.hero-model-mark img { width: 22px; height: 22px; border-radius: 50%; object-fit: contain; }
 
 .hero-model-caption {
   position: absolute;

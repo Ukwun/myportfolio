@@ -49,7 +49,7 @@ export default function ServicesPage() {
         {services.map((service) => {
           const Icon = service.icon;
           return (
-            <div key={service.title} className="rounded-[1.6rem] border border-white/10 bg-[#111111]/85 p-7">
+            <div key={service.title} id={service.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")} className="scroll-mt-28 rounded-[1.6rem] border border-white/10 bg-[#111111]/85 p-7">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#4f8cff]/15 text-[#4f8cff]">
                 <Icon size={20} />
               </div>

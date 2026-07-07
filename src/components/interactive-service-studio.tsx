@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight, Blocks, Compass, Rocket, Sparkles } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
 
 const services = [
   {
@@ -11,6 +12,7 @@ const services = [
     accent: "#4f8cff",
     glow: "rgba(79, 140, 255, 0.24)",
     icon: Compass,
+    href: "/services#premium-business-website",
   },
   {
     title: "Product Platforms",
@@ -18,6 +20,7 @@ const services = [
     accent: "#d6b25e",
     glow: "rgba(214, 178, 94, 0.22)",
     icon: Blocks,
+    href: "/services#custom-web-application",
   },
   {
     title: "Mobile Products",
@@ -25,6 +28,7 @@ const services = [
     accent: "#7dd3fc",
     glow: "rgba(125, 211, 252, 0.2)",
     icon: Rocket,
+    href: "/services#mobile-app-development",
   },
   {
     title: "Immersive Visuals",
@@ -32,6 +36,7 @@ const services = [
     accent: "#a78bfa",
     glow: "rgba(167, 139, 250, 0.2)",
     icon: Sparkles,
+    href: "/services#3d-real-estate-visualization",
   },
 ];
 
@@ -62,9 +67,9 @@ export function InteractiveServiceStudio() {
               </div>
               <h3 className="mt-3 text-xl font-semibold text-white">{activeItem.title}</h3>
               <p className="mt-2 text-sm leading-7 text-white/70">{activeItem.blurb}</p>
-              <div className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-white/80">
+              <Link href={activeItem.href} className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-white/80 transition hover:gap-3 hover:text-[#d6b25e]">
                 Explore this service <ArrowUpRight size={15} />
-              </div>
+              </Link>
             </motion.div>
           </div>
 
@@ -74,10 +79,12 @@ export function InteractiveServiceStudio() {
               const isActive = service.title === activeService;
 
               return (
-                <motion.button
+                <motion.div
                   key={service.title}
-                  type="button"
                   onClick={() => setActiveService(service.title)}
+                  onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") setActiveService(service.title); }}
+                  role="button"
+                  tabIndex={0}
                   whileHover={{ scale: 1.03, y: -6, rotateX: -4, rotateY: 4 }}
                   whileTap={{ scale: 0.97 }}
                   animate={{
@@ -100,11 +107,11 @@ export function InteractiveServiceStudio() {
                     </div>
                     <h3 className="mt-5 text-lg font-semibold text-white">{service.title}</h3>
                     <p className="mt-2 text-sm leading-7 text-white/65">{service.blurb}</p>
-                    <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white/80 transition group-hover:gap-3">
+                    <Link href={service.href} onClick={(event) => event.stopPropagation()} className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white/80 transition group-hover:gap-3 hover:text-[#d6b25e]">
                       View offering <ArrowUpRight size={15} />
-                    </div>
+                    </Link>
                   </div>
-                </motion.button>
+                </motion.div>
               );
             })}
           </div>
