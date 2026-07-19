@@ -8,6 +8,7 @@ const testimonials = [
     logo: "/client-logos/tagmi.png",
     logoWidth: 181,
     logoHeight: 260,
+    portrait: "/testimonial-portraits/tagmi.webp",
     feedback:
       "John brought much-needed structure to a product with a lot of moving parts. He listened before building, asked the right questions, and kept bringing the conversation back to what would make the experience clearer for real users.",
   },
@@ -17,6 +18,7 @@ const testimonials = [
     logo: "/client-logos/ncdfcoop.png",
     logoWidth: 720,
     logoHeight: 212,
+    portrait: "/testimonial-portraits/ncdfcoop.webp",
     feedback:
       "The strongest part of the collaboration was how clearly complex financial workflows were translated into something people could actually follow. We were never left guessing why a product decision had been made.",
   },
@@ -26,6 +28,7 @@ const testimonials = [
     logo: "/client-logos/impactclub.png",
     logoWidth: 720,
     logoHeight: 221,
+    portrait: "/testimonial-portraits/impactclub.webp",
     feedback:
       "It felt like a genuine partnership rather than a hand-off. John cared about the reasoning behind the product, not just how the final screens looked, and the result was stronger because of it.",
   },
@@ -79,16 +82,26 @@ export function ClientTestimonials() {
                 “{testimonial.feedback}”
               </blockquote>
 
-              <footer className="mt-7 border-t border-white/8 pt-5">
-                <p className="font-semibold text-white">{testimonial.company} project team</p>
-                <p className="mt-1 text-sm text-white/48">{testimonial.context}</p>
+              <footer className="mt-7 flex items-center gap-3 border-t border-white/8 pt-5">
+                <Image
+                  src={testimonial.portrait}
+                  alt=""
+                  width={48}
+                  height={48}
+                  className="h-12 w-12 shrink-0 rounded-full border border-white/12 object-cover shadow-[0_8px_24px_rgba(0,0,0,0.3)]"
+                />
+                <div>
+                  <p className="font-semibold text-white">{testimonial.company} project team</p>
+                  <p className="mt-0.5 text-sm text-white/48">{testimonial.context}</p>
+                  <p className="mt-1 text-[10px] uppercase tracking-[0.16em] text-white/30">Illustrative portrait</p>
+                </div>
               </footer>
             </article>
           ))}
         </div>
 
         <p className="mt-5 text-xs leading-5 text-white/35">
-          Project feedback summarized in plain language. Individual names and portraits will be added when client-approved details are available.
+          Portraits are illustrative and do not identify individual clients. Project feedback is summarized in plain language; approved names and client photographs can be added when available.
         </p>
       </div>
     </section>
