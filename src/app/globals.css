@@ -38,6 +38,47 @@ body {
 .project-rail-control { display: grid; width: 44px; height: 44px; place-items: center; border: 0; border-radius: 50%; color: rgba(255,255,255,.78); background: rgba(255,255,255,.07); box-shadow: 0 10px 30px rgba(0,0,0,.2); transition: transform 220ms ease, background 220ms ease, color 220ms ease; }
 .project-rail-control:hover { transform: translateY(-2px); color: white; background: rgba(79,140,255,.2); }
 
+.client-logo-window {
+  width: 100%;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.client-logo-track {
+  display: flex;
+  width: max-content;
+  animation: clientLogoMarquee 42s linear infinite;
+}
+
+.client-logo-window:hover .client-logo-track {
+  animation-play-state: paused;
+}
+
+.client-logo-group {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 1rem;
+  padding-right: 1rem;
+}
+
+.client-logo-card {
+  display: flex;
+  width: 210px;
+  height: 82px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 1rem;
+  background: rgba(255,255,255,.035);
+}
+
+@keyframes clientLogoMarquee {
+  to { transform: translateX(-50%); }
+}
+
 html[data-theme="light"] { --background: #f3f0e9; --foreground: #16181d; color-scheme: light; }
 html[data-theme="light"] body::before { background: radial-gradient(circle at top left, rgba(79,140,255,.14), transparent 34%); }
 html[data-theme="light"] .site-root { background: radial-gradient(circle at top left, rgba(79,140,255,.13), transparent 31%), linear-gradient(120deg,#f8f6f1 0%,#eeeae2 52%,#f8f6f1 100%) !important; color: #17191e; }
@@ -55,7 +96,8 @@ html[data-theme="light"] .site-root [class*="bg-black"] { background-color: rgba
 html[data-theme="light"] .site-root [class*="bg-[linear-gradient"] { background-image: linear-gradient(135deg,rgba(255,255,255,.82),rgba(239,235,226,.7)) !important; background-color: transparent !important; }
 html[data-theme="light"] .site-root [class*="bg-[radial-gradient"] { background-image: radial-gradient(circle at top left,rgba(79,140,255,.12),transparent 42%),linear-gradient(135deg,rgba(255,255,255,.8),rgba(239,235,226,.68)) !important; }
 html[data-theme="light"] .site-root header { background-color: rgba(248,246,241,.86) !important; }
-html[data-theme="light"] .project-card { background: rgba(255,255,255,.74) !important; box-shadow: 0 22px 70px rgba(50,54,65,.12) !important; }
+html[data-theme="light"] .project-card,
+html[data-theme="light"] .client-logo-card { background: rgba(255,255,255,.74) !important; box-shadow: 0 22px 70px rgba(50,54,65,.12) !important; }
 html[data-theme="light"] .project-rail-control { color: #242832; background: rgba(255,255,255,.8); box-shadow: 0 10px 30px rgba(50,54,65,.12); }
 html[data-theme="light"] .btn-primary { color: #15171c; background: linear-gradient(135deg,#fffdf8,#eee9de); box-shadow: 0 12px 34px rgba(65,72,88,.14),0 0 30px rgba(214,178,94,.12); }
 html[data-theme="light"] .btn-secondary { color: #262a33; border-color: rgba(25,29,38,.14); background: rgba(255,255,255,.52); }
@@ -220,7 +262,7 @@ select {
   isolation: isolate;
 }
 
-.hero-model-shell canvas { cursor: grab; touch-action: none; }
+.hero-model-shell canvas { cursor: grab; touch-action: pan-y; }
 .hero-model-shell canvas:active { cursor: grabbing; }
 
 .hero-model-shadow { position: absolute; pointer-events: none; border-radius: 50%; filter: blur(38px); }
@@ -272,4 +314,31 @@ select {
 }
 
 @media (max-width: 1250px) { .hero-model-shell { height: 580px; } }
-@media (prefers-reduced-motion: reduce) { .hero-model-caption i { animation: none; } }
+@media (max-width: 639px) {
+  .hero-model-shell {
+    width: 100%;
+    height: clamp(340px, 112vw, 430px);
+    margin-top: .75rem;
+  }
+
+  .hero-model-title {
+    top: 42px;
+    right: 14px;
+    max-width: 145px;
+  }
+
+  .hero-model-caption {
+    left: 14px;
+    right: 14px;
+    bottom: 10px;
+    font-size: 8px;
+    letter-spacing: .1em;
+  }
+
+  .hero-model-shadow-one { bottom: 12%; }
+  .hero-model-shadow-two { bottom: 15%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-model-caption i,
+  .client-logo-track { animation: none; }
+}

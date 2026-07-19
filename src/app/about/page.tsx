@@ -71,6 +71,35 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      <section className="mx-auto max-w-7xl px-5 pb-24 sm:px-8 lg:px-10 lg:pb-28">
+        <div className="mx-auto max-w-5xl">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-sm uppercase tracking-[0.3em] text-[#d6b25e]">A Personal Introduction</p>
+            <h2 className="mt-4 text-3xl font-semibold leading-tight text-white sm:text-4xl">
+              Meet the person behind the products.
+            </h2>
+            <p className="mt-4 leading-8 text-white/65">
+              A short introduction to who I am, how I think, and what it feels like to work together.
+            </p>
+          </div>
+
+          <div className="relative mt-10 overflow-hidden rounded-[2rem] border border-white/10 bg-[#111111]/80 p-2 shadow-[0_28px_90px_rgba(0,0,0,0.38)] sm:p-3">
+            <div className="pointer-events-none absolute -left-16 -top-16 h-48 w-48 rounded-full bg-[#4f8cff]/15 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-20 -right-16 h-56 w-56 rounded-full bg-[#d6b25e]/10 blur-3xl" />
+            <video
+              className="relative z-10 aspect-video w-full rounded-[1.45rem] bg-black object-contain"
+              controls
+              playsInline
+              preload="metadata"
+              aria-label="Introduction to John Solace and his approach to client work"
+            >
+              <source src="/john-solace-introduction.mp4" type="video/mp4" />
+              Your browser does not support embedded video.
+            </video>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

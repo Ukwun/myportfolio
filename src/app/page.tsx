@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, BarChart3, Blocks, Compass, MessageCircle, Sparkles, Rocket, ShieldCheck } from "lucide-react";
+import { ArrowRight, Blocks, Compass, MessageCircle, Sparkles, Rocket } from "lucide-react";
 import { InteractiveServiceStudio } from "@/components/interactive-service-studio";
 import { LiveIntake } from "@/components/live-intake";
-import { TrustScene } from "@/components/trust-scene";
 import { Hero3D } from "@/components/hero-3d";
 import { PersonalStory } from "@/components/personal-story";
 import { ProjectRail } from "@/components/project-rail";
+import { ClientLogoMarquee } from "@/components/client-logo-marquee";
 
 const whatsappNumber = "2348059085207";
 
@@ -104,31 +104,21 @@ export default function HomePage() {
               <Sparkles size={15} />
               Digital strategy • premium product design • software delivery
             </div>
-            <h1 className="max-w-3xl font-[family-name:var(--font-sora)] text-4xl font-semibold leading-[1.02] sm:text-5xl lg:text-[3.45rem]">
-              I build high-end digital systems that combine software engineering, product design, and 3D visual storytelling.
+            <h1 className="max-w-4xl font-[family-name:var(--font-sora)] text-4xl font-semibold leading-[1.02] sm:text-5xl lg:text-[3.25rem]">
+              I help ambitious companies replace slow operations with premium digital products that drive growth, efficiency, and trust.
             </h1>
-            <p className="mt-6 max-w-xl text-lg leading-8 text-white/70">
-              Strategy, product design, and platform delivery for ambitious teams.
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-white/70">
+              From custom software and mobile apps to AI-powered workflows and premium digital experiences, I partner with businesses that need technology built for long-term growth.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <a href={whatsappLink("Hello John, I visited your website and I’m interested in a custom tech project. My estimated budget is above ₦2M and I’d like to discuss scope, timeline, and pricing.")} target="_blank" rel="noreferrer" className="btn-primary group">
-                Start a ₦2M+ Project
-                <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
-              </a>
-              <a href="/#case-studies" className="btn-secondary group">
+              <Link href="/#case-studies" className="btn-secondary group">
                 See Case Studies
                 <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
-              </a>
-            </div>
-            <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+              </Link>
               <a href={whatsappLink("Hello John, I’d like to book a discovery call to discuss a serious digital project for my business. Please let me know your availability.")} target="_blank" rel="noreferrer" className="btn-primary group">
                 Book a Discovery Call
                 <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
               </a>
-              <Link href="/packages" className="btn-secondary group">
-                View Packages
-                <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
-              </Link>
             </div>
             <div className="mt-8 flex flex-wrap gap-4 text-sm text-white/65">
               {stats.map((item) => (
@@ -140,11 +130,13 @@ export default function HomePage() {
             </div>
           </motion.div>
 
-          <div className="hidden lg:flex items-center justify-center">
+          <div className="flex items-center justify-center">
             <Hero3D />
           </div>
         </div>
       </section>
+
+      <ClientLogoMarquee />
 
       {/* legacy grid replaced by the interactive project rail */}
       {false && <section id="legacy-case-studies" className="mx-auto max-w-7xl px-5 py-10 sm:px-8 lg:px-10">

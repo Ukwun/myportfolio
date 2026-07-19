@@ -170,7 +170,10 @@ export function Hero3D() {
       </div>
       <div className="hero-model-caption">
         <span><i /> Live 3D showcase</span>
-        <strong>Drag to explore</strong>
+        <strong>
+          <span className="sm:hidden">Swipe to explore</span>
+          <span className="hidden sm:inline">Drag to explore</span>
+        </strong>
       </div>
     </div>
   );
