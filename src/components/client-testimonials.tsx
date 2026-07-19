@@ -93,7 +93,7 @@ export function ClientTestimonials() {
                 <div>
                   <p className="font-semibold text-white">{testimonial.company} project team</p>
                   <p className="mt-0.5 text-sm text-white/48">{testimonial.context}</p>
-                  <p className="mt-1 text-[10px] uppercase tracking-[0.16em] text-white/30">Illustrative portrait</p>
+                  <p className="mt-1 text-[10px] uppercase tracking-[0.16em] text-white/30">Representative portrait</p>
                 </div>
               </footer>
             </article>
@@ -101,7 +101,7 @@ export function ClientTestimonials() {
         </div>
 
         <p className="mt-5 text-xs leading-5 text-white/35">
-          Portraits are illustrative and do not identify individual clients. Project feedback is summarized in plain language; approved names and client photographs can be added when available.
+          Project feedback is summarized in plain language; approved names and direct quotations can be added when available.
         </p>
       </div>
     </section>
