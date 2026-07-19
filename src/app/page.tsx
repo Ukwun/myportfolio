@@ -9,6 +9,7 @@ import { Hero3D } from "@/components/hero-3d";
 import { PersonalStory } from "@/components/personal-story";
 import { ProjectRail } from "@/components/project-rail";
 import { ClientLogoMarquee } from "@/components/client-logo-marquee";
+import { ClientTestimonials } from "@/components/client-testimonials";
 
 const whatsappNumber = "2348059085207";
 
@@ -182,6 +183,8 @@ export default function HomePage() {
       </section>}
 
       <ProjectRail />
+
+      <ClientTestimonials />
 
       <PersonalStory />
 
