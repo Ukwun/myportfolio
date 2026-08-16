@@ -10,6 +10,7 @@ const navItems = [
   { label: "Home", href: "/" },
   { label: "Services", href: "/services" },
   { label: "Case Studies", href: "/case-studies" },
+  { label: "Ebooks", href: "/ebooks" },
   { label: "Packages", href: "/packages" },
   { label: "Process", href: "/process" },
   { label: "About", href: "/about" },
@@ -98,7 +99,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
             John Solace
           </Link>
 
-          <nav className="hidden items-center gap-6 text-sm text-white/70 md:flex">
+          <nav className="hidden items-center gap-4 text-sm text-white/70 md:flex xl:gap-6">
             {navItems.map((item) => (
               <Link key={item.href} href={item.href} className="transition hover:text-white">
                 {item.label}

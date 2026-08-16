@@ -15,10 +15,14 @@
 
 # next.js
 /.next/
+/.next-stale-*/
 /out/
 
 # production
 /build
+
+# paid digital products must never be committed to this public repository
+/private-ebooks/
 
 # misc
 .DS_Store

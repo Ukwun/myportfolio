@@ -10,6 +10,34 @@ The site stores `visitor-intelligence` submissions in Netlify Forms and includes
 
 The notification recipient is fixed server-side to `solaceinterlude@gmail.com`. As an additional delivery path, enable **Netlify Forms → Form notifications → Email notification** for the `visitor-intelligence` form and use the same owner address.
 
+## Ebook checkout and delivery
+
+The `/ebooks` storefront initializes Paystack transactions from Netlify Functions, verifies the status, amount, currency, and product ID server-side, and sends the paid PDF as an email attachment through Resend. Card, bank, bank-transfer, and USSD channels are enabled when available on the connected Paystack account.
+
+The ebook PDF is deliberately excluded from this public repository. It must be uploaded to the private, site-wide `ebook-files` Netlify Blob store with the exact key `how-i-flipped-30k.pdf`:
+
+```powershell
+npx netlify login
+npx netlify link
+npx netlify blobs:set ebook-files how-i-flipped-30k.pdf --input "C:\Users\LENOVO 1\Downloads\How_I_Flipped_30K_Into_4_5M_Contract.pdf"
+```
+
+Configure these variables in **Netlify → Project configuration → Environment variables**, with Functions scope where available:
+
+- `PAYSTACK_SECRET_KEY`: Paystack test or live secret key. Never expose it in frontend code.
+- `RESEND_API_KEY`: Resend API key used for automatic PDF delivery.
+- `EBOOK_FROM_EMAIL`: verified sender, for example `John Solace <ebooks@yourdomain.com>`.
+- `EBOOK_REPLY_TO`: optional support address; defaults to `solaceinterlude@gmail.com`.
+- `EBOOK_PRICE_NAIRA`: optional whole-naira price; defaults to `5000`.
+
+In the Paystack dashboard, set the webhook URL to:
+
+```text
+https://YOUR-DOMAIN/.netlify/functions/paystack-webhook
+```
+
+The purchase button remains disabled until the Paystack key, Resend key, and private Blob file are all available. Use Paystack test keys for an end-to-end test before switching to live keys.
+
 ## Getting Started
 
 First, run the development server:
