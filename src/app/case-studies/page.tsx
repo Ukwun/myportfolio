@@ -3,9 +3,9 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { projects } from "@/components/project-rail";
+import { whatsappLink } from "@/lib/contact";
 
-const whatsappNumber = "2348059085207";
-const whatsappLink = (title: string) => `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Hello John, I reviewed the ${title} case study and would like to discuss a project with similar business impact.`)}`;
+const caseStudyWhatsappLink = (title: string) => whatsappLink(`Hello John, I reviewed the ${title} case study and would like to discuss a project with similar business impact.`);
 
 export default function CaseStudiesPage() {
   return (
@@ -31,7 +31,7 @@ export default function CaseStudiesPage() {
             <div className="mt-6 flex flex-wrap gap-2">
               {project.stack.map((item) => <span key={item} className="rounded-full bg-white/6 px-3 py-1 text-xs text-white/65">{item}</span>)}
             </div>
-            <a href={whatsappLink(project.title)} target="_blank" rel="noreferrer" className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-[#d6b25e] transition hover:gap-3">Discuss a similar project <ArrowRight size={15} /></a>
+            <a href={caseStudyWhatsappLink(project.title)} target="_blank" rel="noreferrer" className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-[#d6b25e] transition hover:gap-3">Discuss a similar project <ArrowRight size={15} /></a>
           </motion.article>
         ))}
       </div>

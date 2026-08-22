@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import type { SVGProps } from "react";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpRight, Menu, Sparkles } from "lucide-react";
+import { ArrowUpRight, Menu } from "lucide-react";
+import { whatsappLink } from "@/lib/contact";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -15,12 +17,6 @@ const navItems = [
   { label: "Process", href: "/process" },
   { label: "About", href: "/about" },
 ];
-
-const whatsappNumber = "2348059085207";
-
-function whatsappLink(message: string) {
-  return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-}
 
 function WhatsAppIcon(props: SVGProps<SVGSVGElement>) {
   return (
@@ -58,6 +54,15 @@ function InstagramIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+function LinkedInIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" {...props}>
+      <rect x="3" y="3" width="18" height="18" rx="4" fill="#0A66C2" />
+      <path d="M7.2 9.4h2.05V16H7.2V9.4Zm1.03-3.28a1.19 1.19 0 1 1 0 2.38 1.19 1.19 0 0 1 0-2.38ZM10.55 9.4h1.97v.9h.03c.27-.52.94-1.08 1.94-1.08 2.08 0 2.46 1.37 2.46 3.15V16H14.9v-3.22c0-.77-.01-1.76-1.07-1.76-1.08 0-1.24.84-1.24 1.7V16h-2.04V9.4Z" fill="white" />
+    </svg>
+  );
+}
+
 export function SiteShell({ children }: { children: React.ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -73,7 +78,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const saved = window.localStorage.getItem("portfolio-theme");
     const initial = saved === "light" || saved === "dark" ? saved : window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
-    setTheme(initial);
+    queueMicrotask(() => setTheme(initial));
     document.documentElement.dataset.theme = initial;
   }, []);
 
@@ -94,7 +99,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8 lg:px-10">
           <Link href="/" className="flex items-center gap-3 text-sm font-semibold tracking-[0.35em] text-white/90 uppercase">
             <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[#d6b25e]/35 bg-[#111111]/80 text-[#d6b25e] shadow-[0_0_30px_rgba(214,178,94,0.18)] overflow-hidden">
-              <img src="/new%20brandlogo2.png" alt="8_Gigabytes" className="h-9 w-9 object-contain" />
+              <Image src="/new%20brandlogo2.png" alt="8_Gigabytes" width={36} height={36} className="h-9 w-9 object-contain" />
             </span>
             John Solace
           </Link>
@@ -120,7 +125,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
               </span>
             </button>
             <a
-              href={whatsappLink("Hello John, I visited your website and I’m interested in a custom tech project. My estimated budget is above ₦2M and I’d like to discuss scope, timeline, and pricing.")}
+              href={whatsappLink("Hello John, I visited your website and I’m interested in a custom tech project. I’d like to discuss the current pricing, scope, and timeline.")}
               target="_blank"
               rel="noreferrer"
               className="btn-primary hidden px-4 py-2 text-sm md:inline-flex"
@@ -180,8 +185,11 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
             <a href="https://www.instagram.com/8_gigabytes/" target="_blank" rel="noreferrer" aria-label="Visit Instagram" className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 transition hover:border-[#4f8cff]/40 hover:text-white">
               <InstagramIcon className="h-4 w-4" />
             </a>
-            <a href="mailto:hello@johnstudio.co" className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 transition hover:text-white">
-              hello@johnstudio.co
+            <a href="https://www.linkedin.com/in/john-solace" target="_blank" rel="noreferrer" aria-label="Visit LinkedIn" className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 transition hover:border-[#4f8cff]/40 hover:text-white">
+              <LinkedInIcon className="h-4 w-4" />
+            </a>
+            <a href="mailto:Ukwun97@gmail.com" className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 transition hover:text-white">
+              Ukwun97@gmail.com
               <ArrowUpRight size={15} />
             </a>
           </div>

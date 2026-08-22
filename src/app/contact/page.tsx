@@ -1,10 +1,5 @@
 import { ArrowRight, MessageCircle } from "lucide-react";
-
-const whatsappNumber = "2348059085207";
-
-function whatsappLink(message: string) {
-  return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-}
+import { whatsappLink } from "@/lib/contact";
 
 export default function ContactPage() {
   return (
@@ -17,11 +12,11 @@ export default function ContactPage() {
         </div>
         <div className="rounded-[2rem] border border-white/10 bg-[#111111]/80 p-8">
           <div className="flex flex-col gap-3">
-            <a href={whatsappLink("Hello John, I visited your website and I’m interested in a custom tech project. My estimated budget is above ₦2M and I’d like to discuss scope, timeline, and pricing.")} target="_blank" rel="noreferrer" className="btn-primary flex items-center justify-between px-4 py-4 text-left">
+            <a href={whatsappLink("Hello John, I visited your website and I’m interested in a custom tech project. I’d like to discuss the current pricing, scope, and timeline.")} target="_blank" rel="noreferrer" className="btn-primary flex items-center justify-between px-4 py-4 text-left">
               <span>Request a Private Quote</span>
               <MessageCircle size={16} />
             </a>
-            <a href={whatsappLink("Hello John, I need a premium business website. My budget starts from ₦850k and I’d like to discuss the project.")} target="_blank" rel="noreferrer" className="btn-secondary flex items-center justify-between px-4 py-4 text-left">
+            <a href={whatsappLink("Hello John, I need a premium business website and I’d like to discuss the current price and project scope.")} target="_blank" rel="noreferrer" className="btn-secondary flex items-center justify-between px-4 py-4 text-left">
               <span>Start a Website Project</span>
               <MessageCircle size={16} />
             </a>
@@ -29,8 +24,8 @@ export default function ContactPage() {
               <span>Book a Discovery Call</span>
               <MessageCircle size={16} />
             </a>
-            <a href="mailto:hello@johnstudio.co" className="btn-secondary mt-4 inline-flex items-center gap-2">
-              hello@johnstudio.co <ArrowRight size={15} />
+            <a href="mailto:Ukwun97@gmail.com" className="btn-secondary mt-4 inline-flex items-center gap-2">
+              Ukwun97@gmail.com <ArrowRight size={15} />
             </a>
           </div>
         </div>

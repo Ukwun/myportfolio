@@ -36,7 +36,7 @@ export function EbookPaymentStatus() {
     success: {
       icon: <CheckCircle2 size={28} className="text-emerald-300" />,
       title: "Your ebook is on its way",
-      message: "Payment confirmed. Check your inbox—and your spam or promotions folder—for the PDF delivery email.",
+      message: "Payment confirmed. Check your inbox—and your spam or promotions folder—for your private ebook access link.",
     },
     paid: {
       icon: <Mail size={28} className="text-[#d6b25e]" />,

@@ -8,27 +8,46 @@ The site stores `visitor-intelligence` submissions in Netlify Forms and includes
 - `LEAD_FROM_EMAIL`: optional verified sender, for example `Portfolio <leads@yourdomain.com>`. Until a domain is verified, the function uses Resend's onboarding sender.
 - `NEXT_PUBLIC_GA_MEASUREMENT_ID`: GA4 measurement ID such as `G-XXXXXXXXXX`; this enables real-time visitors, page views, and `generate_lead` conversion events.
 
-The notification recipient is fixed server-side to `solaceinterlude@gmail.com`. As an additional delivery path, enable **Netlify Forms → Form notifications → Email notification** for the `visitor-intelligence` form and use the same owner address.
+The notification recipient is fixed server-side to `Ukwun97@gmail.com`. Submissions are also stored privately for the admin dashboard. As an additional delivery path, enable **Netlify Forms → Form notifications → Email notification** for the `visitor-intelligence` form and use the same owner address.
+
+## Super-admin dashboard
+
+The protected dashboard is available at `/admin`. Only `Ukwun97@gmail.com` can request and verify its passwordless email code. The signed session is stored in an HTTP-only, secure cookie; pricing, enquiries, and verified ebook payments are stored in private Netlify Blob stores.
+
+Add these server-only Netlify environment variables:
+
+- `ADMIN_SESSION_SECRET`: a random secret of at least 32 bytes. Generate one with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`.
+- `ADMIN_FROM_EMAIL`: optional verified sender for login codes. It falls back to `LEAD_FROM_EMAIL` or `EBOOK_FROM_EMAIL`.
+
+The dashboard can change every ebook and service price, review captured enquiries, monitor verified payments and delivery status, and re-verify/retry a payment by reference. Never prefix `ADMIN_SESSION_SECRET` with `NEXT_PUBLIC_`.
 
 ## Ebook checkout and delivery
 
-The `/ebooks` storefront initializes Paystack transactions from Netlify Functions, verifies the status, amount, currency, and product ID server-side, and sends the paid PDF as an email attachment through Resend. Card, bank, bank-transfer, and USSD channels are enabled when available on the connected Paystack account.
+The `/ebooks` storefront initializes Paystack transactions from Netlify Functions and verifies the status, amount, currency, and product ID server-side. After payment, Resend emails a private one-click access link rather than a shareable attachment. Each link lasts one year, permits up to five downloads, and generates a PDF watermarked on every page with the buyer's email and order reference. Card, bank, bank-transfer, and USSD channels are enabled when available on the connected Paystack account.
 
-The ebook PDF is deliberately excluded from this public repository. It must be uploaded to the private, site-wide `ebook-files` Netlify Blob store with the exact key `how-i-flipped-30k.pdf`:
+The ebook PDFs are deliberately excluded from this public repository. Install the Netlify CLI once to avoid temporary `npx` cleanup warnings, link this folder to the existing Netlify project, and upload all three PDFs to the private, site-wide `ebook-files` Blob store using these exact keys:
 
 ```powershell
-npx netlify login
-npx netlify link
-npx netlify blobs:set ebook-files how-i-flipped-30k.pdf --input "C:\Users\LENOVO 1\Downloads\How_I_Flipped_30K_Into_4_5M_Contract.pdf"
+npm install --global netlify-cli
+netlify login
+netlify link
+netlify blobs:set ebook-files how-i-flipped-30k.pdf --input "C:\Users\LENOVO 1\Downloads\How_I_Flipped_30K_Into_4_5M_Contract.pdf"
+netlify blobs:set ebook-files one-skill-first-million.pdf --input "C:\Users\LENOVO 1\Downloads\How_to_Turn_ONE_Skill_Into_Your_First_N1_Million.pdf"
+netlify blobs:set ebook-files lost-beijing-client.pdf --input "C:\Users\LENOVO 1\Downloads\How_I_Lost_A_5000_Dollar_Client_From_Beijing.pdf"
 ```
+
+If npm prints an `EPERM ... npm-cache\_npx` cleanup warning, close other terminals running Node and run `npm cache verify`. The warning concerns a temporary CLI cache; do not move any ebook PDF into `public/` to work around it.
 
 Configure these variables in **Netlify → Project configuration → Environment variables**, with Functions scope where available:
 
 - `PAYSTACK_SECRET_KEY`: Paystack test or live secret key. Never expose it in frontend code.
 - `RESEND_API_KEY`: Resend API key used for automatic PDF delivery.
 - `EBOOK_FROM_EMAIL`: verified sender, for example `John Solace <ebooks@yourdomain.com>`.
-- `EBOOK_REPLY_TO`: optional support address; defaults to `solaceinterlude@gmail.com`.
-- `EBOOK_PRICE_NAIRA`: optional whole-naira price; defaults to `5000`.
+- `EBOOK_REPLY_TO`: optional support address; defaults to `Ukwun97@gmail.com`.
+- `EBOOK_ACCESS_SECRET`: optional dedicated signing secret for private download links. It falls back to `ADMIN_SESSION_SECRET`, then `PAYSTACK_SECRET_KEY`.
+- `EBOOK_PRICE_NAIRA`: optional price for *How I Flipped ₦30K*; defaults to `5000`.
+- `EBOOK_ONE_SKILL_PRICE_NAIRA`: optional price for *The One-Skill Playbook*; defaults to `5000`.
+- `EBOOK_BEIJING_PRICE_NAIRA`: optional price for *The $5,000 Client I Lost*; defaults to `5000`.
 
 In the Paystack dashboard, set the webhook URL to:
 
@@ -36,7 +55,9 @@ In the Paystack dashboard, set the webhook URL to:
 https://YOUR-DOMAIN/.netlify/functions/paystack-webhook
 ```
 
-The purchase button remains disabled until the Paystack key, Resend key, and private Blob file are all available. Use Paystack test keys for an end-to-end test before switching to live keys.
+Each purchase button remains disabled until the Paystack key, Resend key, and that title's private Blob file are all available. Use Paystack test keys for an end-to-end test before switching to live keys.
+
+The three price environment variables provide initial defaults. Prices saved from `/admin` take precedence immediately without a rebuild.
 
 ## Getting Started
 

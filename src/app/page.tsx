@@ -10,12 +10,7 @@ import { PersonalStory } from "@/components/personal-story";
 import { ProjectRail } from "@/components/project-rail";
 import { ClientLogoMarquee } from "@/components/client-logo-marquee";
 import { ClientTestimonials } from "@/components/client-testimonials";
-
-const whatsappNumber = "2348059085207";
-
-function whatsappLink(message: string) {
-  return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-}
+import { whatsappLink } from "@/lib/contact";
 
 /*const caseStudies = [
   {
@@ -174,7 +169,7 @@ export default function HomePage() {
                   <span key={item} className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/65">{item}</span>
                 ))}
               </div>
-              <a href={whatsappLink("Hello John, I’m reviewing your work and I’d like to discuss a project with a serious business impact focus. My budget is above ₦2M and I’d like to explore the fit.")} target="_blank" rel="noreferrer" className="btn-secondary mt-6">
+              <a href={whatsappLink("Hello John, I’m reviewing your work and I’d like to discuss a project with a serious business impact focus and the current pricing.")} target="_blank" rel="noreferrer" className="btn-secondary mt-6">
                 Discuss My Project <ArrowRight size={15} />
               </a>
             </motion.article>
@@ -258,19 +253,19 @@ export default function HomePage() {
             <p className="text-sm uppercase tracking-[0.3em] text-[#d6b25e]">Qualified Enquiry</p>
             <h2 className="mt-2 text-3xl font-semibold text-white">Start with a conversation that filters for real potential.</h2>
             <div className="mt-6 flex flex-col gap-3">
-              <a href={whatsappLink("Hello John, I need a premium business website. My budget starts from ₦850k and I’d like to discuss the project.")} target="_blank" rel="noreferrer" className="flex items-center justify-between rounded-[1.2rem] border border-white/10 bg-white/5 px-4 py-4 text-sm text-white/80 transition hover:border-[#4f8cff]/50 hover:bg-[#4f8cff]/10">
+              <a href={whatsappLink("Hello John, I need a premium business website and I’d like to discuss the current price and project scope.")} target="_blank" rel="noreferrer" className="flex items-center justify-between rounded-[1.2rem] border border-white/10 bg-white/5 px-4 py-4 text-sm text-white/80 transition hover:border-[#4f8cff]/50 hover:bg-[#4f8cff]/10">
                 <span>Start a Website Project</span>
                 <MessageCircle size={16} className="text-[#4f8cff]" />
               </a>
-              <a href={whatsappLink("Hello John, I need custom software/web application development. My budget is above ₦2M and I’d like to discuss requirements.")} target="_blank" rel="noreferrer" className="flex items-center justify-between rounded-[1.2rem] border border-white/10 bg-white/5 px-4 py-4 text-sm text-white/80 transition hover:border-[#4f8cff]/50 hover:bg-[#4f8cff]/10">
+              <a href={whatsappLink("Hello John, I need custom software/web application development and I’d like to discuss the current price and requirements.")} target="_blank" rel="noreferrer" className="flex items-center justify-between rounded-[1.2rem] border border-white/10 bg-white/5 px-4 py-4 text-sm text-white/80 transition hover:border-[#4f8cff]/50 hover:bg-[#4f8cff]/10">
                 <span>Start a Software Project</span>
                 <MessageCircle size={16} className="text-[#4f8cff]" />
               </a>
-              <a href={whatsappLink("Hello John, I need a mobile app for my business. My budget is above ₦3.5M and I’d like to discuss the scope.")} target="_blank" rel="noreferrer" className="flex items-center justify-between rounded-[1.2rem] border border-white/10 bg-white/5 px-4 py-4 text-sm text-white/80 transition hover:border-[#4f8cff]/50 hover:bg-[#4f8cff]/10">
+              <a href={whatsappLink("Hello John, I need a mobile app for my business and I’d like to discuss the current price and scope.")} target="_blank" rel="noreferrer" className="flex items-center justify-between rounded-[1.2rem] border border-white/10 bg-white/5 px-4 py-4 text-sm text-white/80 transition hover:border-[#4f8cff]/50 hover:bg-[#4f8cff]/10">
                 <span>Start a Mobile App Project</span>
                 <MessageCircle size={16} className="text-[#4f8cff]" />
               </a>
-              <a href={whatsappLink("Hello John, I visited your website and I’m interested in a custom tech project. My estimated budget is above ₦2M and I’d like to discuss scope, timeline, and pricing.")} target="_blank" rel="noreferrer" className="flex items-center justify-between rounded-[1.2rem] border border-white/10 bg-white/5 px-4 py-4 text-sm text-white/80 transition hover:border-[#4f8cff]/50 hover:bg-[#4f8cff]/10">
+              <a href={whatsappLink("Hello John, I visited your website and I’m interested in a custom tech project. I’d like to discuss the current pricing, scope, and timeline.")} target="_blank" rel="noreferrer" className="flex items-center justify-between rounded-[1.2rem] border border-white/10 bg-white/5 px-4 py-4 text-sm text-white/80 transition hover:border-[#4f8cff]/50 hover:bg-[#4f8cff]/10">
                 <span>Request a Private Quote</span>
                 <MessageCircle size={16} className="text-[#d6b25e]" />
               </a>

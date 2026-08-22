@@ -1,4 +1,4 @@
-import { EBOOK, getPriceKobo } from "./ebook-catalog.mjs";
+import { getEbookById } from "./ebook-catalog.mjs";
 
 export function getPaystackSecret() {
   return process.env.PAYSTACK_SECRET_KEY || "";
@@ -16,12 +16,26 @@ export async function verifyPaystackTransaction(reference) {
   return result.data;
 }
 
+export function getPaidEbook(transaction) {
+  const ebook = getEbookById(transaction?.metadata?.ebook_id);
+  // Orders created before live pricing was introduced do not contain
+  // price_kobo. Paystack's verified amount remains the source of truth for
+  // those already-in-flight purchases.
+  const checkoutAmount = Number(transaction?.metadata?.price_kobo ?? transaction?.amount);
+  if (
+    !ebook ||
+    transaction?.status !== "success" ||
+    transaction?.currency !== "NGN" ||
+    !Number.isInteger(checkoutAmount) ||
+    checkoutAmount < 10000 ||
+    Number(transaction?.amount) !== checkoutAmount ||
+    !transaction?.customer?.email
+  ) {
+    return null;
+  }
+  return ebook;
+}
+
 export function isValidPaidEbookTransaction(transaction) {
-  return (
-    transaction?.status === "success" &&
-    transaction?.currency === "NGN" &&
-    Number(transaction?.amount) === getPriceKobo() &&
-    transaction?.metadata?.ebook_id === EBOOK.id &&
-    transaction?.customer?.email
-  );
+  return Boolean(getPaidEbook(transaction));
 }
