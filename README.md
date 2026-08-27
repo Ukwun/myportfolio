@@ -12,18 +12,18 @@ The notification recipient is fixed server-side to `Ukwun97@gmail.com`. Submissi
 
 ## Super-admin dashboard
 
-The protected dashboard is available at `/admin`. Only `Ukwun97@gmail.com` can request and verify its passwordless email code. The signed session is stored in an HTTP-only, secure cookie; pricing, enquiries, and verified ebook payments are stored in private Netlify Blob stores.
+Use the **Admin login** link in the website footer, or open `/admin` directly. Only `Ukwun97@gmail.com` can request and verify its passwordless email code. The signed session is stored in an HTTP-only, secure cookie; pricing, enquiries, bank-transfer orders, and ebook delivery records are stored in private Netlify Blob stores.
 
 Add these server-only Netlify environment variables:
 
 - `ADMIN_SESSION_SECRET`: a random secret of at least 32 bytes. Generate one with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`.
 - `ADMIN_FROM_EMAIL`: optional verified sender for login codes. It falls back to `LEAD_FROM_EMAIL` or `EBOOK_FROM_EMAIL`.
 
-The dashboard can change every ebook and service price, review captured enquiries, monitor verified payments and delivery status, and re-verify/retry a payment by reference. Never prefix `ADMIN_SESSION_SECRET` with `NEXT_PUBLIC_`.
+The dashboard can change every ebook and service price, review captured enquiries, inspect each bank-transfer notice, and—after checking the GTBank account—select **Confirm & send ebook** to issue the private delivery link. Never prefix `ADMIN_SESSION_SECRET` with `NEXT_PUBLIC_`.
 
 ## Ebook checkout and delivery
 
-The `/ebooks` storefront initializes Paystack transactions from Netlify Functions and verifies the status, amount, currency, and product ID server-side. After payment, Resend emails a private one-click access link rather than a shareable attachment. Each link lasts one year, permits up to five downloads, and generates a PDF watermarked on every page with the buyer's email and order reference. Card, bank, bank-transfer, and USSD channels are enabled when available on the connected Paystack account.
+The `/ebooks` storefront currently accepts **GTBank transfer only**: account number `0238589273`. A buyer enters their name, email and phone number, transfers the displayed amount, then submits a transfer notice. Resend emails `Ukwun97@gmail.com` with the buyer's details and the selected ebook. After you check the transfer in GTBank, use `/admin` to select **Confirm & send ebook**. Only that manual admin action emails the private one-click access link. Each link lasts one year, permits up to five downloads, and generates a PDF watermarked on every page with the buyer's email and order reference.
 
 The ebook PDFs are deliberately excluded from this public repository. Install the Netlify CLI once to avoid temporary `npx` cleanup warnings, link this folder to the existing Netlify project, and upload all three PDFs to the private, site-wide `ebook-files` Blob store using these exact keys:
 
@@ -40,22 +40,15 @@ If npm prints an `EPERM ... npm-cache\_npx` cleanup warning, close other termina
 
 Configure these variables in **Netlify → Project configuration → Environment variables**, with Functions scope where available:
 
-- `PAYSTACK_SECRET_KEY`: Paystack test or live secret key. Never expose it in frontend code.
 - `RESEND_API_KEY`: Resend API key used for automatic PDF delivery.
 - `EBOOK_FROM_EMAIL`: verified sender, for example `John Solace <ebooks@yourdomain.com>`.
 - `EBOOK_REPLY_TO`: optional support address; defaults to `Ukwun97@gmail.com`.
-- `EBOOK_ACCESS_SECRET`: optional dedicated signing secret for private download links. It falls back to `ADMIN_SESSION_SECRET`, then `PAYSTACK_SECRET_KEY`.
+- `EBOOK_ACCESS_SECRET`: optional dedicated signing secret for private download links. It falls back to `ADMIN_SESSION_SECRET`.
 - `EBOOK_PRICE_NAIRA`: optional price for *How I Flipped ₦30K*; defaults to `5000`.
 - `EBOOK_ONE_SKILL_PRICE_NAIRA`: optional price for *The One-Skill Playbook*; defaults to `5000`.
 - `EBOOK_BEIJING_PRICE_NAIRA`: optional price for *The $5,000 Client I Lost*; defaults to `5000`.
 
-In the Paystack dashboard, set the webhook URL to:
-
-```text
-https://YOUR-DOMAIN/.netlify/functions/paystack-webhook
-```
-
-Each purchase button remains disabled until the Paystack key, Resend key, and that title's private Blob file are all available. Use Paystack test keys for an end-to-end test before switching to live keys.
+Each purchase button remains disabled until the email-delivery configuration and that title's private Blob file are available. Test a complete bank-transfer notice and admin approval before promoting the store to customers.
 
 The three price environment variables provide initial defaults. Prices saved from `/admin` take precedence immediately without a rebuild.
 

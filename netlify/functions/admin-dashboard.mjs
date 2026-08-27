@@ -1,8 +1,7 @@
 import { getStore } from "@netlify/blobs";
 import { getAdminEmail } from "../lib/admin-auth.mjs";
 import { EBOOKS } from "../lib/ebook-catalog.mjs";
-import { fulfillEbookOrder } from "../lib/ebook-fulfillment.mjs";
-import { isValidPaidEbookTransaction, verifyPaystackTransaction } from "../lib/paystack.mjs";
+import { fulfillBankTransferOrder } from "../lib/ebook-fulfillment.mjs";
 import { SERVICE_DEFINITIONS, getSitePricing, saveSitePricing } from "../lib/site-settings.mjs";
 
 async function listRecords(storeName, limit = 100) {
@@ -22,18 +21,19 @@ const handler = async (request) => {
   if (!adminEmail) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
   if (request.method === "GET") {
-    const [pricing, payments, leads, entitlements] = await Promise.all([
+    const [pricing, payments, leads, entitlements, bankTransferOrders] = await Promise.all([
       getSitePricing(),
       listRecords("ebook-payments"),
       listRecords("portfolio-leads"),
       listRecords("ebook-entitlements"),
+      listRecords("bank-transfer-orders"),
     ]);
     const entitlementByReference = new Map(entitlements.map((entitlement) => [entitlement.reference, entitlement]));
     const monitoredPayments = payments.map((payment) => {
       const entitlement = entitlementByReference.get(payment.reference);
       return { ...payment, downloadCount: entitlement?.downloadCount || 0, maxDownloads: entitlement?.maxDownloads || 0, accessExpiresAt: entitlement?.expiresAt || null };
     });
-    return Response.json({ adminEmail, pricing, payments: monitoredPayments, leads, ebooks: EBOOKS.map(({ id, title }) => ({ id, title })), services: SERVICE_DEFINITIONS });
+    return Response.json({ adminEmail, pricing, payments: monitoredPayments, bankTransferOrders, leads, ebooks: EBOOKS.map(({ id, title }) => ({ id, title })), services: SERVICE_DEFINITIONS });
   }
 
   let body;
@@ -48,13 +48,16 @@ const handler = async (request) => {
     return Response.json({ saved: true, pricing });
   }
 
-  if (request.method === "POST" && body.action === "verify-payment") {
+  if (request.method === "POST" && body.action === "confirm-bank-transfer") {
     const reference = String(body.reference || "");
     if (!/^[A-Za-z0-9.=-]{8,100}$/.test(reference)) return Response.json({ error: "Invalid payment reference" }, { status: 400 });
-    const transaction = await verifyPaystackTransaction(reference);
-    if (!isValidPaidEbookTransaction(transaction)) return Response.json({ error: "Paystack has not confirmed a valid ebook payment." }, { status: 409 });
-    const delivery = await fulfillEbookOrder(transaction);
-    return Response.json({ verified: true, delivery });
+    const orders = getStore({ name: "bank-transfer-orders", consistency: "strong" });
+    const order = await orders.get(reference, { type: "json" });
+    if (!order) return Response.json({ error: "Bank transfer order was not found." }, { status: 404 });
+    if (order.status === "delivered") return Response.json({ confirmed: true, delivery: { delivered: true, duplicate: true } });
+    const delivery = await fulfillBankTransferOrder(order);
+    await orders.setJSON(reference, { ...order, status: "delivered", confirmedAt: new Date().toISOString(), confirmedBy: adminEmail, deliveredAt: new Date().toISOString() });
+    return Response.json({ confirmed: true, delivery });
   }
 
   return Response.json({ error: "Unsupported action" }, { status: 400 });

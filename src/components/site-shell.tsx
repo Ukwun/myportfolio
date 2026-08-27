@@ -175,7 +175,10 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
       <footer className="border-t border-white/10 bg-black/20">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 text-sm text-white/60 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:px-10">
           <p>© 2026 John Solace. Premium digital systems for ambitious brands.</p>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <Link href="/admin" className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-white/65 transition hover:border-[#d6b25e]/45 hover:text-white">
+              Admin login
+            </Link>
             <a href="https://www.facebook.com/" target="_blank" rel="noreferrer" aria-label="Visit Facebook" className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 transition hover:border-[#4f8cff]/40 hover:text-white">
               <FacebookIcon className="h-4 w-4" />
             </a>

@@ -9,6 +9,7 @@ type DashboardData = {
   ebooks: Array<{ id: string; title: string }>;
   services: Array<{ id: string; name: string; defaultPriceNaira: number | null }>;
   payments: Array<{ reference: string; ebookTitle: string; customerName: string; customerEmail: string; amountNaira: number; currency: string; paidAt: string | null; verifiedAt: string; deliveryStatus: string; downloadCount: number; maxDownloads: number; accessExpiresAt: string | null }>;
+  bankTransferOrders: Array<{ reference: string; ebookTitle: string; customerName: string; customerEmail: string; customerPhone: string; amountNaira: number; transferReference: string | null; status: string; submittedAt: string; confirmedAt?: string }>;
   leads: Array<{ id: string; name: string; company: string; email: string; phone: string; focus: string; source: string; submittedAt: string }>;
 };
 
@@ -103,17 +104,17 @@ export function AdminDashboard() {
     }
   }
 
-  async function verifyPayment(reference: string) {
+  async function confirmBankTransfer(reference: string) {
     setBusy(true);
     setMessage("");
     try {
-      const response = await fetch("/.netlify/functions/admin-dashboard", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "verify-payment", reference }) });
+      const response = await fetch("/.netlify/functions/admin-dashboard", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "confirm-bank-transfer", reference }) });
       const result = await response.json();
-      if (!response.ok) throw new Error(result.error || "Payment could not be verified.");
-      setMessage("Payment verified and ebook delivery confirmed or retried.");
+      if (!response.ok) throw new Error(result.error || "Bank transfer could not be confirmed.");
+      setMessage("Bank transfer confirmed and the private ebook delivery has been sent or retried.");
       await loadDashboard();
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Payment could not be verified.");
+      setMessage(error instanceof Error ? error.message : "Bank transfer could not be confirmed.");
     } finally {
       setBusy(false);
     }
@@ -166,7 +167,7 @@ export function AdminDashboard() {
       {message ? <div role="status" className="mt-6 rounded-2xl border border-[#d6b25e]/20 bg-[#d6b25e]/8 px-5 py-4 text-sm text-[#ead394]">{message}</div> : null}
 
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-5"><BookOpen className="text-[#7cabff]" size={20} /><p className="mt-3 text-3xl font-semibold">{data.payments.length}</p><p className="text-sm text-white/50">recorded payments</p></div>
+        <div className="rounded-2xl border border-white/10 bg-white/5 p-5"><BookOpen className="text-[#7cabff]" size={20} /><p className="mt-3 text-3xl font-semibold">{data.bankTransferOrders.filter((order) => order.status !== "delivered").length}</p><p className="text-sm text-white/50">transfer reviews pending</p></div>
         <div className="rounded-2xl border border-white/10 bg-white/5 p-5"><Users className="text-[#7cabff]" size={20} /><p className="mt-3 text-3xl font-semibold">{data.leads.length}</p><p className="text-sm text-white/50">captured enquiries</p></div>
         <div className="rounded-2xl border border-white/10 bg-white/5 p-5"><CheckCircle2 className="text-emerald-300" size={20} /><p className="mt-3 text-3xl font-semibold">{data.payments.filter((payment) => payment.deliveryStatus === "delivered").length}</p><p className="text-sm text-white/50">ebooks delivered</p></div>
       </div>
@@ -179,7 +180,9 @@ export function AdminDashboard() {
         </div>
       </form>
 
-      <section className="mt-8 rounded-[2rem] border border-white/10 bg-[#111111]/82 p-6 sm:p-8"><h2 className="text-2xl font-semibold">Payments and delivery</h2><div className="mt-5 overflow-x-auto"><table className="w-full min-w-[950px] text-left text-sm"><thead className="text-white/45"><tr><th className="pb-3">Customer</th><th className="pb-3">Ebook</th><th className="pb-3">Amount</th><th className="pb-3">Status</th><th className="pb-3">Downloads</th><th className="pb-3">Reference</th><th className="pb-3">Action</th></tr></thead><tbody>{data.payments.map((payment) => <tr key={payment.reference} className="border-t border-white/8"><td className="py-4"><p className="text-white">{payment.customerName}</p><p className="text-xs text-white/45">{payment.customerEmail}</p></td><td className="py-4 pr-4">{payment.ebookTitle}</td><td className="py-4">{formatNaira(payment.amountNaira)}</td><td className="py-4 capitalize">{payment.deliveryStatus}</td><td className="py-4">{payment.downloadCount} / {payment.maxDownloads || 5}</td><td className="py-4 font-mono text-xs">{payment.reference}</td><td className="py-4"><button disabled={busy} onClick={() => verifyPayment(payment.reference)} type="button" className="rounded-full border border-white/12 px-3 py-2 text-xs hover:border-[#4f8cff]/45">Verify / retry</button></td></tr>)}</tbody></table>{data.payments.length === 0 ? <p className="py-8 text-center text-white/45">No verified ebook payments have been recorded yet.</p> : null}</div></section>
+      <section className="mt-8 rounded-[2rem] border border-white/10 bg-[#111111]/82 p-6 sm:p-8"><h2 className="text-2xl font-semibold">Bank transfer approvals</h2><p className="mt-2 text-sm text-white/50">Check the GTBank account first. Selecting the action below is what sends the buyer’s private ebook.</p><div className="mt-5 overflow-x-auto"><table className="w-full min-w-[1000px] text-left text-sm"><thead className="text-white/45"><tr><th className="pb-3">Buyer</th><th className="pb-3">Ebook</th><th className="pb-3">Amount</th><th className="pb-3">Transfer ref.</th><th className="pb-3">Submitted</th><th className="pb-3">Status</th><th className="pb-3">Action</th></tr></thead><tbody>{data.bankTransferOrders.map((order) => <tr key={order.reference} className="border-t border-white/8"><td className="py-4"><p className="text-white">{order.customerName}</p><a href={`mailto:${order.customerEmail}`} className="block text-xs text-white/45 hover:text-white">{order.customerEmail}</a><a href={`tel:${order.customerPhone}`} className="text-xs text-white/45 hover:text-white">{order.customerPhone}</a></td><td className="py-4 pr-4">{order.ebookTitle}</td><td className="py-4">{formatNaira(order.amountNaira)}</td><td className="py-4 font-mono text-xs">{order.transferReference || "—"}</td><td className="py-4">{formatDate(order.submittedAt)}</td><td className="py-4 capitalize">{order.status.replace(/-/g, " ")}</td><td className="py-4">{order.status === "delivered" ? <span className="text-xs text-emerald-200">Sent</span> : <button disabled={busy} onClick={() => confirmBankTransfer(order.reference)} type="button" className="rounded-full border border-[#d6b25e]/40 px-3 py-2 text-xs text-[#ead394] hover:border-[#d6b25e]">Confirm &amp; send ebook</button>}</td></tr>)}</tbody></table>{data.bankTransferOrders.length === 0 ? <p className="py-8 text-center text-white/45">No bank transfer notices have been submitted yet.</p> : null}</div></section>
+
+      <section className="mt-8 rounded-[2rem] border border-white/10 bg-[#111111]/82 p-6 sm:p-8"><h2 className="text-2xl font-semibold">Ebook delivery record</h2><div className="mt-5 overflow-x-auto"><table className="w-full min-w-[850px] text-left text-sm"><thead className="text-white/45"><tr><th className="pb-3">Customer</th><th className="pb-3">Ebook</th><th className="pb-3">Amount</th><th className="pb-3">Delivery</th><th className="pb-3">Downloads</th><th className="pb-3">Reference</th></tr></thead><tbody>{data.payments.map((payment) => <tr key={payment.reference} className="border-t border-white/8"><td className="py-4"><p className="text-white">{payment.customerName}</p><p className="text-xs text-white/45">{payment.customerEmail}</p></td><td className="py-4 pr-4">{payment.ebookTitle}</td><td className="py-4">{formatNaira(payment.amountNaira)}</td><td className="py-4 capitalize">{payment.deliveryStatus}</td><td className="py-4">{payment.downloadCount} / {payment.maxDownloads || 5}</td><td className="py-4 font-mono text-xs">{payment.reference}</td></tr>)}</tbody></table>{data.payments.length === 0 ? <p className="py-8 text-center text-white/45">No ebooks have been sent yet.</p> : null}</div></section>
 
       <section className="mt-8 rounded-[2rem] border border-white/10 bg-[#111111]/82 p-6 sm:p-8"><h2 className="text-2xl font-semibold">Users and enquiries</h2><div className="mt-5 overflow-x-auto"><table className="w-full min-w-[850px] text-left text-sm"><thead className="text-white/45"><tr><th className="pb-3">Name</th><th className="pb-3">Contact</th><th className="pb-3">Company</th><th className="pb-3">Need</th><th className="pb-3">Submitted</th></tr></thead><tbody>{data.leads.map((lead) => <tr key={lead.id} className="border-t border-white/8"><td className="py-4 text-white">{lead.name}</td><td className="py-4"><a href={`mailto:${lead.email}`} className="block hover:text-white">{lead.email}</a><a href={`tel:${lead.phone}`} className="text-xs text-white/45 hover:text-white">{lead.phone}</a></td><td className="py-4">{lead.company || "—"}</td><td className="py-4 capitalize">{lead.focus || "Not selected"}</td><td className="py-4">{formatDate(lead.submittedAt)}</td></tr>)}</tbody></table>{data.leads.length === 0 ? <p className="py-8 text-center text-white/45">No enquiries have been captured yet.</p> : null}</div></section>
     </div>

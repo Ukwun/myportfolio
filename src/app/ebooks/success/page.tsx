@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { EbookPaymentStatus } from "@/components/ebook-payment-status";
 
 export const metadata: Metadata = {
-  title: "Ebook Payment | John Solace",
+  title: "Ebook Orders | John Solace",
   robots: { index: false, follow: false },
 };
 

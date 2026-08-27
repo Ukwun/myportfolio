@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { FormEvent, useEffect, useState } from "react";
-import { ArrowRight, BookOpen, Check, CreditCard, Landmark, LoaderCircle, Mail, ShieldCheck } from "lucide-react";
+import { ArrowRight, BookOpen, Check, Landmark, LoaderCircle, Mail, ShieldCheck } from "lucide-react";
 
 type Ebook = {
   id: string;
@@ -84,6 +84,10 @@ export function EbookStorefront() {
   const [selectedId, setSelectedId] = useState(initialEbooks[0].id);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [transferReference, setTransferReference] = useState("");
+  const [showTransferDetails, setShowTransferDetails] = useState(false);
+  const [transferSubmitted, setTransferSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
 
@@ -117,25 +121,33 @@ export function EbookStorefront() {
   function chooseEbook(id: string, scroll = false) {
     setSelectedId(id);
     setError("");
+    setShowTransferDetails(false);
+    setTransferSubmitted(false);
     if (scroll) requestAnimationFrame(() => document.getElementById("ebook-checkout")?.scrollIntoView({ behavior: "smooth", block: "start" }));
   }
 
-  async function startCheckout(event: FormEvent<HTMLFormElement>) {
+  function startCheckout(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setError("");
+    setShowTransferDetails(true);
+  }
+
+  async function notifyBankTransfer() {
     setError("");
     setSubmitting(true);
 
     try {
-      const response = await fetch("/.netlify/functions/create-ebook-order", {
+      const response = await fetch("/.netlify/functions/bank-transfer-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ebookId: selectedEbook.id, name, email }),
+        body: JSON.stringify({ ebookId: selectedEbook.id, name, email, phone, transferReference }),
       });
       const result = await response.json();
-      if (!response.ok || !result.checkoutUrl) throw new Error(result.error || "Unable to start checkout.");
-      window.location.assign(result.checkoutUrl);
+      if (!response.ok || !result.received) throw new Error(result.error || "Unable to submit your transfer notice.");
+      setTransferSubmitted(true);
     } catch (checkoutError) {
-      setError(checkoutError instanceof Error ? checkoutError.message : "Unable to start checkout.");
+      setError(checkoutError instanceof Error ? checkoutError.message : "Unable to submit your transfer notice.");
+    } finally {
       setSubmitting(false);
     }
   }
@@ -218,28 +230,46 @@ export function EbookStorefront() {
                 <label className="text-sm text-white/65">Delivery email
                   <input type="email" required autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@example.com" className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-white outline-none placeholder:text-white/28 focus:border-[#4f8cff]/45" />
                 </label>
+                <label className="text-sm text-white/65">Phone number
+                  <input type="tel" required autoComplete="tel" value={phone} onChange={(event) => setPhone(event.target.value)} placeholder="0800 000 0000" className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-white outline-none placeholder:text-white/28 focus:border-[#4f8cff]/45" />
+                </label>
               </div>
+
+              {showTransferDetails ? <div className="mt-5 rounded-2xl border border-[#d6b25e]/25 bg-[#d6b25e]/[0.07] p-5">
+                <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#d6b25e]">Bank transfer details</p>
+                <p className="mt-3 text-lg font-semibold text-white">GTBank · 0238589273</p>
+                <p className="mt-2 text-sm leading-6 text-white/65">Transfer exactly {formatNaira(selectedEbook.priceNaira)} to this account. After the transfer, select the button below so John can verify it and send your private ebook to the email you entered.</p>
+                <label className="mt-4 block text-sm text-white/65">Transfer reference <span className="text-white/35">(optional)</span>
+                  <input type="text" value={transferReference} onChange={(event) => setTransferReference(event.target.value)} placeholder="Bank transaction reference" className="mt-2 w-full rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-white outline-none placeholder:text-white/28 focus:border-[#4f8cff]/45" />
+                </label>
+              </div> : null}
 
               {error ? <p role="alert" className="mt-4 rounded-xl border border-red-400/20 bg-red-400/8 px-4 py-3 text-sm text-red-200">{error}</p> : null}
 
-              <button type="submit" disabled={!canPurchase} className="btn-primary group mt-5 w-full disabled:cursor-not-allowed disabled:opacity-45">
-                {submitting ? <><LoaderCircle size={16} className="animate-spin" /> Opening secure checkout</> :
+              {!showTransferDetails ? <button type="submit" disabled={!canPurchase} className="btn-primary group mt-5 w-full disabled:cursor-not-allowed disabled:opacity-45">
+                {submitting ? <><LoaderCircle size={16} className="animate-spin" /> Preparing transfer details</> :
                   storeState === "checking" ? <><LoaderCircle size={16} className="animate-spin" /> Checking availability</> :
                     storeState === "unavailable" ? "Purchasing opens shortly" :
-                      <>Buy securely for {formatNaira(selectedEbook.priceNaira)} <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" /></>}
-              </button>
+                      <>Continue to bank transfer <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" /></>}
+              </button> : null}
+
+              {showTransferDetails && !transferSubmitted ? <button type="button" onClick={notifyBankTransfer} disabled={!canPurchase || submitting} className="btn-primary group mt-5 w-full disabled:cursor-not-allowed disabled:opacity-45">
+                {submitting ? <><LoaderCircle size={16} className="animate-spin" /> Notifying John</> : <>I have made the transfer <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" /></>}
+              </button> : null}
+
+              {transferSubmitted ? <div role="status" className="mt-5 rounded-2xl border border-emerald-300/20 bg-emerald-300/8 p-4 text-sm leading-6 text-emerald-100">Your transfer notice has been sent to John. Once the payment is confirmed in the GTBank account, your private ebook link will be emailed to <strong>{email}</strong>.</div> : null}
 
               {storeState === "unavailable" ? <p className="mt-3 text-center text-xs leading-5 text-white/38">Secure payment and delivery for this title are being configured. Please check back shortly.</p> : null}
             </form>
 
             <div className="mt-6 grid gap-3 text-sm text-white/50 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
-              <div className="flex items-center gap-2"><CreditCard size={15} className="text-[#7cabff]" /> Paystack checkout</div>
-              <div className="flex items-center gap-2"><Landmark size={15} className="text-[#7cabff]" /> Bank transfer</div>
-              <div className="flex items-center gap-2"><Mail size={15} className="text-[#7cabff]" /> Email delivery</div>
+              <div className="flex items-center gap-2"><Landmark size={15} className="text-[#7cabff]" /> GTBank transfer</div>
+              <div className="flex items-center gap-2"><ShieldCheck size={15} className="text-[#7cabff]" /> Manual verification</div>
+              <div className="flex items-center gap-2"><Mail size={15} className="text-[#7cabff]" /> Private email delivery</div>
             </div>
             <div className="mt-4 flex items-start gap-2 text-xs leading-5 text-white/36">
               <ShieldCheck size={14} className="mt-0.5 shrink-0 text-[#d6b25e]" />
-              Payment details are handled securely by Paystack. Each paid copy is privately delivered and personalized to its buyer.
+              Bank transfers are checked manually before any ebook is delivered. Each approved copy is privately delivered and personalized to its buyer.
             </div>
           </div>
         </div>
