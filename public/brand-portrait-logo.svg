@@ -1,0 +1,24 @@
+<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="20" y1="15" x2="160" y2="165" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E9D5B4"/>
+      <stop offset="1" stop-color="#C4B49A"/>
+    </linearGradient>
+    <linearGradient id="shirt" x1="45" y1="78" x2="136" y2="160" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#121213"/>
+      <stop offset="1" stop-color="#050607"/>
+    </linearGradient>
+  </defs>
+  <rect width="180" height="180" rx="90" fill="url(#bg)"/>
+  <circle cx="90" cy="68" r="28" fill="#1C1A18"/>
+  <path d="M61 78C61 66.9543 69.9543 58 81 58H99C110.046 58 119 66.9543 119 78V82H61V78Z" fill="#1C1A18"/>
+  <path d="M72 92C78.1065 96.8267 84.0728 99.2405 90 99.2405C95.9272 99.2405 101.893 96.8267 108 92L121 134C117.619 141.726 106.836 145 90 145C73.164 145 62.381 141.726 59 134L72 92Z" fill="url(#shirt)"/>
+  <path d="M84 70C84 67.7909 85.7909 66 88 66H92C94.2091 66 96 67.7909 96 70V74H84V70Z" fill="#111111" opacity="0.8"/>
+  <path d="M74 69C79.6989 64.2671 85.0738 61.9 90 61.9C94.9262 61.9 100.301 64.2671 106 69" stroke="#241B17" stroke-width="3" stroke-linecap="round"/>
+  <path d="M78 92C81.4473 96.1192 85.2683 97.9836 90 97.9836C94.7317 97.9836 98.5527 96.1192 102 92" stroke="#3A2D27" stroke-width="2" stroke-linecap="round"/>
+  <path d="M83 83.5C85.3381 85.6206 87.4439 86.6809 90 86.6809C92.5561 86.6809 94.6619 85.6206 97 83.5" stroke="#2B241F" stroke-width="2" stroke-linecap="round"/>
+  <path d="M80 81.5C82.1854 84.1062 85.1193 85.5598 90 85.5598C94.8807 85.5598 97.8146 84.1062 100 81.5" stroke="#241B17" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="90" cy="93" r="2.5" fill="#1A120F"/>
+  <circle cx="117" cy="41" r="6" fill="#E8D8B7" opacity="0.35"/>
+  <circle cx="122" cy="38" r="3" fill="#F4EADB" opacity="0.5"/>
+</svg>
