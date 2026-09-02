@@ -16,6 +16,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning className={`${sora.variable} ${inter.variable} ${mono.variable} h-full antialiased`}>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+      </head>
       <body className="min-h-full bg-[#070707] text-[#f5f5f5]">
         <SiteAnalytics />
         <SiteShell>{children}</SiteShell>

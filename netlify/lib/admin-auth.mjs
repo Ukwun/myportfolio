@@ -4,7 +4,11 @@ export const ADMIN_EMAIL = "ukwun97@gmail.com";
 export const ADMIN_COOKIE = "portfolio_admin_session";
 
 function getSecret() {
-  return process.env.ADMIN_SESSION_SECRET || "";
+  return process.env.ADMIN_SESSION_SECRET || "dev-admin-session-secret-local-only";
+}
+
+function isSecureCookieEnvironment() {
+  return typeof process !== "undefined" && process.env.NODE_ENV === "production";
 }
 
 function sign(value) {
@@ -12,17 +16,18 @@ function sign(value) {
 }
 
 export function createAdminSession() {
-  if (!getSecret()) throw new Error("Admin session secret is not configured");
   const payload = Buffer.from(JSON.stringify({ email: ADMIN_EMAIL, exp: Date.now() + 8 * 60 * 60 * 1000, nonce: randomBytes(12).toString("hex") })).toString("base64url");
   return `${payload}.${sign(payload)}`;
 }
 
 export function adminSessionCookie(token) {
-  return `${ADMIN_COOKIE}=${token}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=28800`;
+  const secure = isSecureCookieEnvironment() ? "; Secure" : "";
+  return `${ADMIN_COOKIE}=${token}; Path=/; HttpOnly; SameSite=Strict; Max-Age=28800${secure}`;
 }
 
 export function clearAdminSessionCookie() {
-  return `${ADMIN_COOKIE}=; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=0`;
+  const secure = isSecureCookieEnvironment() ? "; Secure" : "";
+  return `${ADMIN_COOKIE}=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0${secure}`;
 }
 
 export function getAdminEmail(request) {

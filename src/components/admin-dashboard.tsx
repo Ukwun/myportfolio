@@ -61,7 +61,12 @@ export function AdminDashboard() {
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Unable to send the code.");
       setView("code");
-      setMessage("A six-digit sign-in code has been sent to the super-admin email.");
+      if (result.devCode) {
+        setCode(String(result.devCode));
+        setMessage(`Development mode is active. Use this code to continue: ${result.devCode}`);
+      } else {
+        setMessage("A six-digit sign-in code has been sent to the super-admin email.");
+      }
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Unable to send the code.");
     } finally {

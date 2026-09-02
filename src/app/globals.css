@@ -15,12 +15,39 @@
 
 html {
   scroll-behavior: smooth;
+  max-width: 100%;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+img,
+svg,
+video,
+canvas,
+iframe,
+object {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+* {
+  word-break: break-word;
+}
+
+@media (max-width: 640px) {
+  .btn-primary,
+  .btn-secondary,
+  .btn-whatsapp {
+    width: 100%;
+  }
 }
 
 .site-root { transition: background 500ms ease, color 350ms ease; }

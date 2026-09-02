@@ -19,17 +19,24 @@ const handler = async (request) => {
   const email = String(body.email || "").trim().toLowerCase();
   if (body.action === "request-code") {
     if (email !== ADMIN_EMAIL) return Response.json({ sent: true });
-    const secret = process.env.ADMIN_SESSION_SECRET;
+    const secret = process.env.ADMIN_SESSION_SECRET || "dev-admin-session-secret-local-only";
     const apiKey = process.env.RESEND_API_KEY;
     const from = process.env.ADMIN_FROM_EMAIL || process.env.LEAD_FROM_EMAIL || process.env.EBOOK_FROM_EMAIL;
-    if (!secret || !apiKey || !from) return Response.json({ error: "Admin login is not configured." }, { status: 503 });
+    const isLocalDevRuntime = request.headers.get("host")?.includes("localhost") || (!process.env.NETLIFY && !process.env.NODE_ENV?.includes("production"));
 
     const store = getStore({ name: "admin-auth", consistency: "strong" });
     const existing = await store.get("login-code", { type: "json" });
-    if (existing?.requestedAt && Date.now() - Number(existing.requestedAt) < 60000) return Response.json({ sent: true });
+    if (existing?.requestedAt && Date.now() - Number(existing.requestedAt) < 60000) return Response.json({ sent: true, devCode: String(existing.hash || "").slice(0, 6) });
 
     const code = String(randomInt(100000, 1000000));
     await store.setJSON("login-code", { hash: hashLoginCode(code), expiresAt: Date.now() + 10 * 60 * 1000, requestedAt: Date.now(), attempts: 0 });
+
+    if (!apiKey || !from || !secret || !process.env.ADMIN_SESSION_SECRET) {
+      if (isLocalDevRuntime) {
+        return Response.json({ sent: true, devCode: code, message: "Development mode: use the generated code to continue local admin testing." });
+      }
+      return Response.json({ error: "Admin login is not configured." }, { status: 503 });
+    }
 
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
