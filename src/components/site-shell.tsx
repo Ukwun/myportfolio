@@ -99,7 +99,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8 lg:px-10">
           <Link href="/" className="flex items-center gap-3 text-sm font-semibold tracking-[0.35em] text-white/90 uppercase">
             <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-[#d6b25e]/35 bg-[#111111]/80 text-[#d6b25e] shadow-[0_0_30px_rgba(214,178,94,0.18)]">
-              <Image src="/brand-portrait-logo.svg" alt="John Solace" width={36} height={36} className="h-9 w-9 object-cover" />
+              <Image src="/meeeee3.jpg" alt="John Solace" width={72} height={72} className="brand-portrait-image h-full w-full object-cover" />
             </span>
             John Solace
           </Link>
