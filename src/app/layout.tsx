@@ -11,6 +11,10 @@ const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono" });
 export const metadata: Metadata = {
   title: "John Solace | Premium Digital Systems",
   description: "Luxury digital product studio crafting premium websites, software, mobile apps, and 3D storytelling experiences.",
+  metadataBase: new URL("https://www.johnsolace.online"),
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

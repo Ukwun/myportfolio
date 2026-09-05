@@ -44,8 +44,12 @@ const handler = async (request) => {
   }
 
   if (request.method === "PATCH" && body.action === "update-pricing") {
-    const pricing = await saveSitePricing(body.pricing, adminEmail);
-    return Response.json({ saved: true, pricing });
+    try {
+      const pricing = await saveSitePricing(body.pricing, adminEmail);
+      return Response.json({ saved: true, pricing });
+    } catch (error) {
+      return Response.json({ error: error instanceof Error ? error.message : "Invalid pricing" }, { status: 400 });
+    }
   }
 
   if (request.method === "POST" && body.action === "confirm-bank-transfer") {

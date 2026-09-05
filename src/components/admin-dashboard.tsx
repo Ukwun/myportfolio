@@ -5,7 +5,7 @@ import { BookOpen, CheckCircle2, LoaderCircle, LogOut, Mail, RefreshCw, Save, Sh
 
 type DashboardData = {
   adminEmail: string;
-  pricing: { ebooks: Record<string, number>; services: Record<string, number | null>; updatedAt: string | null };
+  pricing: { ebooks: Record<string, number | null>; services: Record<string, number | null>; updatedAt: string | null };
   ebooks: Array<{ id: string; title: string }>;
   services: Array<{ id: string; name: string; defaultPriceNaira: number | null }>;
   payments: Array<{ reference: string; ebookTitle: string; customerName: string; customerEmail: string; amountNaira: number; currency: string; paidAt: string | null; verifiedAt: string; deliveryStatus: string; downloadCount: number; maxDownloads: number; accessExpiresAt: string | null }>;
@@ -180,8 +180,8 @@ export function AdminDashboard() {
       <form onSubmit={savePricing} className="mt-8 rounded-[2rem] border border-white/10 bg-[#111111]/82 p-6 sm:p-8">
         <div className="flex items-center justify-between gap-4"><div><h2 className="text-2xl font-semibold">Live pricing</h2><p className="mt-2 text-sm text-white/50">Changes are stored privately and reflected by the storefront and service pages immediately.</p></div><button disabled={busy} className="btn-primary shrink-0"><Save size={15} /> Save prices</button></div>
         <div className="mt-7 grid gap-8 lg:grid-cols-2">
-          <div><h3 className="font-semibold text-[#d6b25e]">Ebooks</h3><div className="mt-4 space-y-3">{data.ebooks.map((ebook) => <label key={ebook.id} className="block text-sm text-white/65">{ebook.title}<input type="number" min="100" step="100" value={pricing.ebooks[ebook.id] ?? ""} onChange={(event) => setPricing({ ...pricing, ebooks: { ...pricing.ebooks, [ebook.id]: Number(event.target.value) } })} className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#4f8cff]/45" /></label>)}</div></div>
-          <div><h3 className="font-semibold text-[#d6b25e]">Services</h3><div className="mt-4 grid gap-3 sm:grid-cols-2">{data.services.map((service) => <label key={service.id} className="block text-sm text-white/65">{service.name}<input type="number" min="100" step="10000" placeholder="Custom quote" value={pricing.services[service.id] ?? ""} onChange={(event) => setPricing({ ...pricing, services: { ...pricing.services, [service.id]: event.target.value ? Number(event.target.value) : null } })} className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#4f8cff]/45" /></label>)}</div></div>
+          <div><h3 className="font-semibold text-[#d6b25e]">Ebooks</h3><div className="mt-4 space-y-3">{data.ebooks.map((ebook) => <label key={ebook.id} className="block text-sm text-white/65">{ebook.title}<input type="number" min="100" step="1" value={pricing.ebooks[ebook.id] ?? ""} onChange={(event) => setPricing({ ...pricing, ebooks: { ...pricing.ebooks, [ebook.id]: event.target.value === "" ? null : Number(event.target.value) } })} className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#4f8cff]/45" /></label>)}</div></div>
+          <div><h3 className="font-semibold text-[#d6b25e]">Services</h3><div className="mt-4 grid gap-3 sm:grid-cols-2">{data.services.map((service) => <label key={service.id} className="block text-sm text-white/65">{service.name}<input type="number" min="100" step="1" placeholder="Custom quote" value={pricing.services[service.id] ?? ""} onChange={(event) => setPricing({ ...pricing, services: { ...pricing.services, [service.id]: event.target.value ? Number(event.target.value) : null } })} className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none focus:border-[#4f8cff]/45" /></label>)}</div></div>
         </div>
       </form>
 

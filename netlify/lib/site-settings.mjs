@@ -19,7 +19,7 @@ export function getDefaultPricing() {
   };
 }
 
-function validPrice(value, allowNull = false) {
+function parsePrice(value, allowNull = false) {
   if (allowNull && (value === null || value === "")) return null;
   const price = Number(value);
   return Number.isInteger(price) && price >= 100 ? price : undefined;
@@ -49,12 +49,14 @@ export async function saveSitePricing(input, updatedBy) {
   const services = { ...current.services };
 
   for (const ebook of EBOOKS) {
-    const price = validPrice(input?.ebooks?.[ebook.id]);
-    if (price !== undefined) ebooks[ebook.id] = price;
+    const price = parsePrice(input?.ebooks?.[ebook.id]);
+    if (price === undefined) throw new Error(`Invalid price for ebook: ${ebook.title}`);
+    ebooks[ebook.id] = price;
   }
   for (const service of SERVICE_DEFINITIONS) {
-    const price = validPrice(input?.services?.[service.id], service.id === "enterprise-system");
-    if (price !== undefined) services[service.id] = price;
+    const price = parsePrice(input?.services?.[service.id], service.id === "enterprise-system");
+    if (price === undefined) throw new Error(`Invalid price for service: ${service.name}`);
+    services[service.id] = price;
   }
 
   const next = { ebooks, services, updatedAt: new Date().toISOString(), updatedBy };
