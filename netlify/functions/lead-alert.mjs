@@ -53,4 +53,3 @@ const handler = async (request) => {
 };
 
 export default handler;
-export const config = { path: "/.netlify/functions/lead-alert" };

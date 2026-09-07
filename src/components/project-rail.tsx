@@ -1,9 +1,9 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import type { PointerEvent, WheelEvent } from "react";
+import type { PointerEvent } from "react";
 
 export const projects = [
   { title: "AfriGO", industry: "Digital Trade Operating System", problem: "Cross-border trade teams needed one reliable system for onboarding, operations, and visibility.", built: "A guided operating layer with automated workflows, team onboarding, customer portals, and reporting.", outcome: "Improved clarity and execution speed across high-volume trade operations.", stack: ["Next.js", "Firebase", "Tailwind"] },
@@ -46,15 +46,23 @@ export function ProjectRail() {
     event.currentTarget.dataset.dragging = "false";
   }
 
-  function wheelAcross(event: WheelEvent<HTMLDivElement>) {
-    const node = rail.current;
-    if (!node || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
-    const movingRight = event.deltaY > 0;
-    const canMove = movingRight ? node.scrollLeft + node.clientWidth < node.scrollWidth - 2 : node.scrollLeft > 2;
-    if (!canMove) return;
-    event.preventDefault();
-    node.scrollLeft += event.deltaY;
-  }
+  useEffect(() => {
+    const railNode = rail.current;
+    if (!railNode) return;
+    const activeRail = railNode;
+
+    function wheelAcross(event: WheelEvent) {
+      if (Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+      const movingRight = event.deltaY > 0;
+      const canMove = movingRight ? activeRail.scrollLeft + activeRail.clientWidth < activeRail.scrollWidth - 2 : activeRail.scrollLeft > 2;
+      if (!canMove) return;
+      event.preventDefault();
+      activeRail.scrollLeft += event.deltaY;
+    }
+
+    activeRail.addEventListener("wheel", wheelAcross, { passive: false });
+    return () => activeRail.removeEventListener("wheel", wheelAcross);
+  }, []);
 
   return (
     <section id="case-studies" className="mx-auto max-w-7xl px-5 py-12 sm:px-8 lg:px-10">
@@ -69,7 +77,7 @@ export function ProjectRail() {
         </div>
       </div>
 
-      <div ref={rail} onPointerDown={startDrag} onPointerMove={updateDrag} onPointerUp={stopDrag} onPointerCancel={stopDrag} onWheel={wheelAcross} className="project-rail -mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-8 sm:-mx-8 sm:px-8 lg:-mx-10 lg:px-10">
+      <div ref={rail} onPointerDown={startDrag} onPointerMove={updateDrag} onPointerUp={stopDrag} onPointerCancel={stopDrag} className="project-rail -mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-8 sm:-mx-8 sm:px-8 lg:-mx-10 lg:px-10">
         {projects.map((project, index) => (
           <motion.article
             key={project.title}

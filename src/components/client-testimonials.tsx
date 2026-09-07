@@ -91,9 +91,8 @@ export function ClientTestimonials() {
                   className="h-12 w-12 shrink-0 rounded-full border border-white/12 object-cover shadow-[0_8px_24px_rgba(0,0,0,0.3)]"
                 />
                 <div>
-                  <p className="font-semibold text-white">{testimonial.company} project team</p>
+                  <p className="font-semibold text-white">{testimonial.company}</p>
                   <p className="mt-0.5 text-sm text-white/48">{testimonial.context}</p>
-                  <p className="mt-1 text-[10px] uppercase tracking-[0.16em] text-white/30">Representative portrait</p>
                 </div>
               </footer>
             </article>

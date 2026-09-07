@@ -29,7 +29,6 @@ const handler = async (request) => {
   if (!(await isEbookReady(ebook))) {
     return Response.json({ error: "Ebook delivery is being configured. Please try again shortly." }, { status: 503 });
   }
-
   const pricing = await getSitePricing();
   const reference = `bank-${Date.now()}-${randomBytes(5).toString("hex")}`;
   const order = {
@@ -81,4 +80,3 @@ const handler = async (request) => {
 };
 
 export default handler;
-export const config = { path: "/.netlify/functions/bank-transfer-order" };
