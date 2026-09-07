@@ -173,7 +173,8 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
       </a>
 
       <footer className="border-t border-white/10 bg-black/20">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 text-sm text-white/60 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:px-10">
+        <div className="mx-auto flex max-w-7xl flex-col gap-6 px-5 py-8 text-sm text-white/60 sm:px-8 lg:px-10">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <p>© 2026 John Solace. Premium digital systems for ambitious brands.</p>
           <div className="flex flex-wrap items-center gap-3">
             <Link href="/admin" className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-white/65 transition hover:border-[#d6b25e]/45 hover:text-white">
@@ -194,6 +195,19 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
             <a href="mailto:Ukwun97@gmail.com" className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2 transition hover:text-white">
               Ukwun97@gmail.com
               <ArrowUpRight size={15} />
+            </a>
+          </div>
+          </div>
+          <div className="flex justify-center border-t border-white/8 pt-5">
+            <a href="https://websitelaunches.com/site/johnsolace.online" target="_blank" rel="noopener noreferrer" aria-label="View the John Solace public launch record on Website Launches">
+              <img
+                src="https://websitelaunches.com/badge/johnsolace.online.svg"
+                alt="Established online - Public launch record"
+                width={255}
+                height={55}
+                loading="lazy"
+                decoding="async"
+              />
             </a>
           </div>
         </div>
