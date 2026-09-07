@@ -114,7 +114,21 @@ function LoadingModel() {
 export function Hero3D() {
   const [index, setIndex] = useState(0);
   const [phase, setPhase] = useState<Phase>("enter");
-  const activeModel = models[index];
+  const [isCompact, setIsCompact] = useState(false);
+  const visibleModels = isCompact ? models.slice(0, 2) : models;
+  const activeIndex = index % visibleModels.length;
+  const activeModel = visibleModels[activeIndex];
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(pointer: coarse), (prefers-reduced-motion: reduce)");
+    const updatePowerMode = () => {
+      const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+      setIsCompact(window.innerWidth < 768 || mediaQuery.matches || connection?.saveData === true || navigator.hardwareConcurrency <= 4);
+    };
+    updatePowerMode();
+    mediaQuery.addEventListener("change", updatePowerMode);
+    return () => mediaQuery.removeEventListener("change", updatePowerMode);
+  }, []);
 
   useEffect(() => {
     const duration = phase === "enter" ? 1900 : phase === "hold" ? 9000 : 1650;
@@ -122,18 +136,18 @@ export function Hero3D() {
       if (phase === "enter") setPhase("hold");
       else if (phase === "hold") setPhase("exit");
       else {
-        setIndex((current) => (current + 1) % models.length);
+        setIndex((current) => (current + 1) % visibleModels.length);
         setPhase("enter");
       }
     }, duration);
     return () => window.clearTimeout(timer);
-  }, [phase]);
+  }, [phase, visibleModels.length]);
 
   return (
     <div className="hero-model-shell" aria-label="Live rotating showcase of branded 3D work">
       <div className="hero-model-shadow hero-model-shadow-one" />
       <div className="hero-model-shadow hero-model-shadow-two" />
-      <Canvas shadows dpr={[1, 1.6]} camera={{ position: [0, 0.05, 6.4], fov: 32 }} gl={{ antialias: true, alpha: true }}>
+      <Canvas shadows={!isCompact} dpr={isCompact ? [1, 1] : [1, 1.6]} camera={{ position: [0, 0.05, 6.4], fov: 32 }} gl={{ antialias: !isCompact, alpha: true }}>
         <ambientLight intensity={0.65} />
         <spotLight position={[4, 6, 5]} angle={0.38} penumbra={0.9} intensity={85} castShadow shadow-bias={-0.0001} />
         <pointLight position={[-3.5, 0.5, 2]} color="#4f8cff" intensity={22} distance={8} />
@@ -156,7 +170,7 @@ export function Hero3D() {
           enableDamping
         />
 
-        <Environment resolution={256}>
+        <Environment resolution={isCompact ? 64 : 256}>
           <Lightformer intensity={3.5} color="white" position={[0, 5, -4]} scale={[6, 2, 1]} />
           <Lightformer intensity={2.4} color="#80aaff" position={[-5, 1, 1]} rotation={[0, Math.PI / 2, 0]} scale={[4, 2, 1]} />
           <Lightformer intensity={2.1} color="#e6c46f" position={[5, -1, 1]} rotation={[0, -Math.PI / 2, 0]} scale={[3, 2, 1]} />
@@ -164,7 +178,7 @@ export function Hero3D() {
       </Canvas>
 
       <div className="hero-model-title" key={activeModel.label}>
-        <span>0{index + 1} / 0{models.length}</span>
+        <span>0{activeIndex + 1} / 0{visibleModels.length}</span>
         <strong>{activeModel.label}</strong>
         <small>{activeModel.detail}</small>
       </div>

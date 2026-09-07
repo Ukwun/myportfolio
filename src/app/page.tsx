@@ -1,16 +1,21 @@
 "use client";
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { ArrowRight, Blocks, Compass, MessageCircle, Sparkles, Rocket } from "lucide-react";
 import { InteractiveServiceStudio } from "@/components/interactive-service-studio";
 import { LiveIntake } from "@/components/live-intake";
-import { Hero3D } from "@/components/hero-3d";
 import { PersonalStory } from "@/components/personal-story";
 import { ProjectRail } from "@/components/project-rail";
 import { ClientLogoMarquee } from "@/components/client-logo-marquee";
 import { ClientTestimonials } from "@/components/client-testimonials";
 import { whatsappLink } from "@/lib/contact";
+
+const Hero3D = dynamic(() => import("@/components/hero-3d").then((module) => module.Hero3D), {
+  ssr: false,
+  loading: () => <div className="hero-model-shell hero-model-placeholder" aria-label="Loading 3D showcase" />,
+});
 
 /*const caseStudies = [
   {

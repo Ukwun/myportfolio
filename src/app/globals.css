@@ -44,9 +44,13 @@ object {
 
 @media (max-width: 640px) {
   .btn-primary,
-  .btn-secondary,
-  .btn-whatsapp {
+  .btn-secondary {
     width: 100%;
+  }
+
+  .btn-whatsapp {
+    width: auto;
+    max-width: calc(100vw - 2rem);
   }
 }
 
