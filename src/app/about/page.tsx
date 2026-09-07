@@ -1,7 +1,13 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { ArrowRight, Box, Code2, Layers3, Sparkles } from "lucide-react";
 import { GitHubMark } from "@/components/github-mark";
 import { AboutPortrait } from "@/components/about-portrait";
+
+export const metadata: Metadata = {
+  title: "About",
+  alternates: { canonical: "/about/" },
+};
 
 const experience = [
   "Fintech & cryptocurrency products",

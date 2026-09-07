@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import { ServicePricingGrid } from "@/components/service-pricing-grid";
+
+export const metadata: Metadata = {
+  title: "Packages",
+  alternates: { canonical: "/packages/" },
+};
 
 export default function PackagesPage() {
   return (

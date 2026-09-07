@@ -4,6 +4,7 @@ import { EbookStorefront } from "@/components/ebook-storefront";
 export const metadata: Metadata = {
   title: "Ebooks | John Solace",
   description: "Practical ebooks on winning high-value clients, building trust, and delivering ambitious digital projects.",
+  alternates: { canonical: "/ebooks/" },
 };
 
 export default function EbooksPage() {

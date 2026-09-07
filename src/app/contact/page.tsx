@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { whatsappLink } from "@/lib/contact";
+
+export const metadata: Metadata = {
+  title: "Contact",
+  alternates: { canonical: "/contact/" },
+};
 
 export default function ContactPage() {
   return (

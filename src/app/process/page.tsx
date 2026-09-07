@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Process",
+  alternates: { canonical: "/process/" },
+};
 
 const steps = [
   { title: "01. Discovery", text: "We clarify the business objective, customer journey, and growth ambition before anything is designed." },

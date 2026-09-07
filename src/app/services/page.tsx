@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import { ServicePricingGrid } from "@/components/service-pricing-grid";
+
+export const metadata: Metadata = {
+  title: "Services",
+  alternates: { canonical: "/services/" },
+};
 
 export default function ServicesPage() {
   return (
