@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Bot, CheckCircle2, Sparkles } from "lucide-react";
 import {
@@ -32,18 +32,18 @@ export function LiveIntake() {
 
   useEffect(() => {
     const profile = readVisitorProfile();
-    setName(profile.name);
-    setCompany(profile.company);
-    setEmail(profile.email);
-    setPhone(profile.phone);
-    setFocus(profile.focus as VisitorFocus | "");
-    setActivity(readVisitorActivity());
+    const frame = requestAnimationFrame(() => {
+      setName(profile.name);
+      setCompany(profile.company);
+      setEmail(profile.email);
+      setPhone(profile.phone);
+      setFocus(profile.focus as VisitorFocus | "");
+      setActivity(readVisitorActivity());
+    });
+    return () => cancelAnimationFrame(frame);
   }, []);
 
-  const headline = useMemo(() => {
-    const profile = readVisitorProfile();
-    return getProfileHeadline(profile);
-  }, [ready, name, company, email, phone, focus]);
+  const headline = getProfileHeadline(readVisitorProfile());
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -71,7 +71,10 @@ export function LiveIntake() {
         fetch("/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: netlifyPayload.toString() }),
         fetch("/.netlify/functions/lead-alert", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(lead) }),
       ]);
-      const stored = results[0].status === "fulfilled" && results[0].value.ok;
+      const formStored = results[0].status === "fulfilled" && results[0].value.ok;
+      const functionStored = results[1].status === "fulfilled" && results[1].value.ok;
+      const functionResult = results[1].status === "fulfilled" ? await results[1].value.clone().json().catch(() => null) : null;
+      const stored = formStored || functionStored || functionResult?.stored === true;
       setSubmitState(stored ? "sent" : "error");
       if (stored) window.dispatchEvent(new CustomEvent("portfolio:lead", { detail: { focus } }));
     } catch {

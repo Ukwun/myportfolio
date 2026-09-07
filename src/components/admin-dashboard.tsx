@@ -43,6 +43,18 @@ export function AdminDashboard() {
     setView("dashboard");
   }
 
+  async function refreshDashboard() {
+    setBusy(true);
+    setMessage("");
+    try {
+      await loadDashboard();
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Unable to refresh the admin dashboard.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
   useEffect(() => {
     queueMicrotask(() => {
       loadDashboard().catch((error) => {
@@ -126,10 +138,19 @@ export function AdminDashboard() {
   }
 
   async function logout() {
-    await fetch("/.netlify/functions/admin-auth", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "logout" }) });
-    setData(null);
-    setPricing(null);
-    setView("login");
+    setBusy(true);
+    setMessage("");
+    try {
+      const response = await fetch("/.netlify/functions/admin-auth", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "logout" }) });
+      if (!response.ok) throw new Error("Unable to sign out. Please try again.");
+      setData(null);
+      setPricing(null);
+      setView("login");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Unable to sign out. Please try again.");
+    } finally {
+      setBusy(false);
+    }
   }
 
   if (view === "checking") return <div className="flex min-h-[50vh] items-center justify-center"><LoaderCircle className="animate-spin text-[#7cabff]" size={32} /></div>;
@@ -166,7 +187,7 @@ export function AdminDashboard() {
     <div className="mx-auto max-w-7xl">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div><p className="text-sm uppercase tracking-[0.3em] text-[#d6b25e]">Protected control room</p><h1 className="mt-2 text-4xl font-semibold text-white">Portfolio super-admin</h1><p className="mt-3 text-white/55">Signed in as {data.adminEmail}</p></div>
-        <div className="flex gap-3"><button onClick={() => loadDashboard()} className="btn-secondary"><RefreshCw size={15} /> Refresh</button><button onClick={logout} className="btn-secondary"><LogOut size={15} /> Sign out</button></div>
+        <div className="flex gap-3"><button type="button" disabled={busy} onClick={refreshDashboard} className="btn-secondary disabled:cursor-wait disabled:opacity-50"><RefreshCw size={15} className={busy ? "animate-spin" : ""} /> Refresh</button><button type="button" disabled={busy} onClick={logout} className="btn-secondary disabled:cursor-wait disabled:opacity-50"><LogOut size={15} /> Sign out</button></div>
       </div>
 
       {message ? <div role="status" className="mt-6 rounded-2xl border border-[#d6b25e]/20 bg-[#d6b25e]/8 px-5 py-4 text-sm text-[#ead394]">{message}</div> : null}

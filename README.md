@@ -1,88 +1,129 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# John Solace Portfolio
 
-## Production lead notifications and analytics
+Premium digital systems studio website for John Solace. The public site presents websites, software platforms, mobile products, 3D storytelling, selected work, testimonials, a qualification form, and a direct WhatsApp contact path.
 
-The site stores `visitor-intelligence` submissions in Netlify Forms and includes an owner-alert function. Configure these variables in **Netlify → Site configuration → Environment variables**:
+## What This Repository Does
 
-- `RESEND_API_KEY`: server-only Resend API key used by the lead-alert function.
-- `LEAD_FROM_EMAIL`: optional verified sender, for example `Portfolio <leads@yourdomain.com>`. Until a domain is verified, the function uses Resend's onboarding sender.
-- `NEXT_PUBLIC_GA_MEASUREMENT_ID`: GA4 measurement ID such as `G-XXXXXXXXXX`; this enables real-time visitors, page views, and `generate_lead` conversion events.
+### Public experience
 
-The notification recipient is fixed server-side to `Ukwun97@gmail.com`. Submissions are also stored privately for the admin dashboard. As an additional delivery path, enable **Netlify Forms → Form notifications → Email notification** for the `visitor-intelligence` form and use the same owner address.
+- Static Next.js App Router pages for the home page, about, services, packages, process, case studies, contact, and ebooks.
+- Responsive visual system with 3D scenes, project rails, client logos, testimonials, motion, and mobile-friendly navigation.
+- Every WhatsApp CTA uses `src/lib/contact.ts`. The configured number is `08119678524`, represented in international WhatsApp format as `2348119678524`.
+- The intake form submits to Netlify Forms and also stores a private lead record through `netlify/functions/lead-alert.mjs`.
+- Optional GA4 tracking is enabled with `NEXT_PUBLIC_GA_MEASUREMENT_ID`.
 
-## Super-admin dashboard
+### Private operations
 
-Use the **Admin login** link in the website footer, or open `/admin` directly. Only `Ukwun97@gmail.com` can request and verify its passwordless email code. The signed session is stored in an HTTP-only, secure cookie; pricing, enquiries, bank-transfer orders, and ebook delivery records are stored in private Netlify Blob stores.
+- `/admin` is a passwordless email-code dashboard restricted to `Ukwun97@gmail.com`.
+- Netlify Blobs store leads, pricing, ebook payment records, bank-transfer orders, entitlements, and private ebook files.
+- Ebook delivery is deliberately manual: the buyer submits a GTBank transfer notice, the owner verifies the payment, and the admin dashboard sends a personalized, expiring, download-limited PDF link.
+- Netlify Functions provide admin auth, live settings, lead alerts, ebook availability, bank-transfer orders, and protected ebook access.
 
-Add these server-only Netlify environment variables:
+## Current State
 
-- `ADMIN_SESSION_SECRET`: a random secret of at least 32 bytes. Generate one with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`.
-- `ADMIN_FROM_EMAIL`: optional verified sender for login codes. It falls back to `LEAD_FROM_EMAIL` or `EBOOK_FROM_EMAIL`.
+The application is structurally ready for a Netlify deployment. `next.config.ts` uses a static export, `netlify.toml` publishes `out`, and the production build has been verified with Next.js 16. The repository is connected to `https://github.com/Ukwun/myportfolio`, so a Netlify site linked to that repository can auto-deploy from `main`.
 
-The dashboard can change every ebook and service price, review captured enquiries, inspect each bank-transfer notice, and—after checking the GTBank account—select **Confirm & send ebook** to issue the private delivery link. Never prefix `ADMIN_SESSION_SECRET` with `NEXT_PUBLIC_`.
+The following are implemented in code but cannot be completed by a repository commit alone:
 
-## Ebook checkout and delivery
+- Netlify site creation/linking, custom domain DNS, and HTTPS.
+- Netlify environment variables and Blob store access.
+- Resend sender verification and API key.
+- Uploading the private ebook PDFs to the `ebook-files` Blob store.
+- A real bank-transfer submission, admin approval, email-delivery, and protected-download test.
+- Production analytics and Netlify Forms email notifications, if desired.
 
-The `/ebooks` storefront currently accepts **GTBank transfer only**: account number `0238589273`. A buyer enters their name, email and phone number, transfers the displayed amount, then submits a transfer notice. Resend emails `Ukwun97@gmail.com` with the buyer's details and the selected ebook. After you check the transfer in GTBank, use `/admin` to select **Confirm & send ebook**. Only that manual admin action emails the private one-click access link. Each link lasts one year, permits up to five downloads, and generates a PDF watermarked on every page with the buyer's email and order reference.
+## Local Development
 
-The ebook PDFs are deliberately excluded from this public repository. Install the Netlify CLI once to avoid temporary `npx` cleanup warnings, link this folder to the existing Netlify project, and upload all three PDFs to the private, site-wide `ebook-files` Blob store using these exact keys:
+Requirements: Node.js 20 and npm.
+
+```powershell
+npm install
+npm run dev
+```
+
+Open `http://localhost:3000`.
+
+Release checks:
+
+```powershell
+npm run lint
+npm run build
+```
+
+`npm run build` creates the static site in `out`. Netlify Functions are deployed separately from `netlify/functions`.
+
+## Netlify Auto-Deploy Setup
+
+1. In Netlify, create or open a site and choose **Import from Git > GitHub**.
+2. Select `Ukwun/myportfolio`, set the production branch to `main`, and let Netlify read `netlify.toml`.
+3. Confirm these values:
+   - Build command: `npm run build`
+   - Publish directory: `out`
+   - Functions directory: `netlify/functions`
+   - Node version: `20`
+4. Add the environment variables below under the production deploy context.
+5. Deploy once, then configure the custom domain and HTTPS.
+6. Keep future changes on `main` (or merge pull requests into it); Netlify will build and deploy automatically.
+
+## Required Netlify Variables
+
+Set these as server-side variables. Do not add secrets with the `NEXT_PUBLIC_` prefix.
+
+| Variable | Purpose |
+| --- | --- |
+| `ADMIN_SESSION_SECRET` | At least 32 random bytes for signed admin sessions. Required in production. |
+| `RESEND_API_KEY` | Sends lead alerts, admin codes, and approved ebook delivery emails. |
+| `ADMIN_FROM_EMAIL` | Verified Resend sender for admin login codes. |
+| `LEAD_FROM_EMAIL` | Verified Resend sender for lead alerts. |
+| `EBOOK_FROM_EMAIL` | Verified Resend sender for ebook delivery. |
+| `EBOOK_REPLY_TO` | Optional support/reply address; defaults to `Ukwun97@gmail.com`. |
+| `EBOOK_ACCESS_SECRET` | Dedicated signing secret for protected ebook links; otherwise `ADMIN_SESSION_SECRET` is used. |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Optional GA4 ID such as `G-XXXXXXXXXX`. |
+| `EBOOK_PRICE_NAIRA` | Optional initial price for the first ebook. |
+| `EBOOK_ONE_SKILL_PRICE_NAIRA` | Optional initial price for the second ebook. |
+| `EBOOK_BEIJING_PRICE_NAIRA` | Optional initial price for the third ebook. |
+
+Generate secrets locally with:
+
+```powershell
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
+
+Use a verified domain sender in Resend. The temporary `onboarding@resend.dev` sender is suitable only for limited testing and may not deliver to arbitrary customers.
+
+## Private Ebook Files
+
+The PDFs must not be committed to GitHub or placed in `public/`. Install and authenticate the Netlify CLI, link the site, then upload the files using the exact keys expected by `netlify/lib/ebook-catalog.mjs`:
 
 ```powershell
 npm install --global netlify-cli
 netlify login
 netlify link
-netlify blobs:set ebook-files how-i-flipped-30k.pdf --input "C:\Users\LENOVO 1\Downloads\How_I_Flipped_30K_Into_4_5M_Contract.pdf"
-netlify blobs:set ebook-files one-skill-first-million.pdf --input "C:\Users\LENOVO 1\Downloads\How_to_Turn_ONE_Skill_Into_Your_First_N1_Million.pdf"
-netlify blobs:set ebook-files lost-beijing-client.pdf --input "C:\Users\LENOVO 1\Downloads\How_I_Lost_A_5000_Dollar_Client_From_Beijing.pdf"
+netlify blobs:set ebook-files how-i-flipped-30k.pdf --input "C:\path\How_I_Flipped_30K_Into_4_5M_Contract.pdf"
+netlify blobs:set ebook-files one-skill-first-million.pdf --input "C:\path\How_to_Turn_ONE_Skill_Into_Your_First_N1_Million.pdf"
+netlify blobs:set ebook-files lost-beijing-client.pdf --input "C:\path\How_I_Lost_A_5000_Dollar_Client_From_Beijing.pdf"
 ```
 
-If npm prints an `EPERM ... npm-cache\_npx` cleanup warning, close other terminals running Node and run `npm cache verify`. The warning concerns a temporary CLI cache; do not move any ebook PDF into `public/` to work around it.
+The ebook purchase buttons remain unavailable until the required Resend configuration, access secret, and private Blob file exist.
 
-Configure these variables in **Netlify → Project configuration → Environment variables**, with Functions scope where available:
+## Go-Live Verification
 
-- `RESEND_API_KEY`: Resend API key used for automatic PDF delivery.
-- `EBOOK_FROM_EMAIL`: verified sender, for example `John Solace <ebooks@yourdomain.com>`.
-- `EBOOK_REPLY_TO`: optional support address; defaults to `Ukwun97@gmail.com`.
-- `EBOOK_ACCESS_SECRET`: optional dedicated signing secret for private download links. It falls back to `ADMIN_SESSION_SECRET`.
-- `EBOOK_PRICE_NAIRA`: optional price for *How I Flipped ₦30K*; defaults to `5000`.
-- `EBOOK_ONE_SKILL_PRICE_NAIRA`: optional price for *The One-Skill Playbook*; defaults to `5000`.
-- `EBOOK_BEIJING_PRICE_NAIRA`: optional price for *The $5,000 Client I Lost*; defaults to `5000`.
+Run this checklist after the first production deploy:
 
-Each purchase button remains disabled until the email-delivery configuration and that title's private Blob file are available. Test a complete bank-transfer notice and admin approval before promoting the store to customers.
+- Open every public route on desktop and mobile; check navigation, images, 3D assets, video, and the WhatsApp buttons.
+- Click a WhatsApp CTA and confirm it opens `+234 811 967 8524` with the intended prefilled message.
+- Submit the intake form and confirm both the Netlify Form record and owner alert.
+- Request and verify an admin code at `/admin`; confirm pricing changes persist after refresh.
+- Confirm each ebook reports available on `/ebooks`.
+- Submit a real or controlled bank-transfer notice; verify the order appears in `/admin`.
+- Check the bank account before using **Confirm & send ebook**.
+- Confirm the buyer email, protected link, watermark, one-year expiry, and five-download limit.
+- Test invalid, expired, repeated, and over-limit ebook links.
+- Check Netlify deploy logs, Function logs, Forms, Blob data, Resend delivery logs, and analytics.
 
-The three price environment variables provide initial defaults. Prices saved from `/admin` take precedence immediately without a rebuild.
+## Important Operational Notes
 
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- The ebook workflow is bank-transfer based, not an automatic card payment gateway. A human must verify funds before delivery.
+- Netlify Blobs and Resend are production dependencies; a successful static build does not prove those services are configured.
+- Keep private keys, PDF files, customer data, and Blob credentials out of Git history.
+- The admin route and ebook success route are excluded from `robots.txt`; this is not an authentication boundary.

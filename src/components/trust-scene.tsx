@@ -118,8 +118,11 @@ export function TrustScene() {
 
   useEffect(() => {
     const currentProfile = readVisitorProfile();
-    setProfile(currentProfile);
-    setSelectedFocus((currentProfile.focus || "default") as FocusMode);
+    const frame = requestAnimationFrame(() => {
+      setProfile(currentProfile);
+      setSelectedFocus((currentProfile.focus || "default") as FocusMode);
+    });
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   const activeOption = useMemo(() => focusOptions.find((option) => option.key === selectedFocus) ?? focusOptions[0], [selectedFocus]);

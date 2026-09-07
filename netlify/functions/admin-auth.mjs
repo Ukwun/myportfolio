@@ -26,10 +26,12 @@ const handler = async (request) => {
 
     const store = getStore({ name: "admin-auth", consistency: "strong" });
     const existing = await store.get("login-code", { type: "json" });
-    if (existing?.requestedAt && Date.now() - Number(existing.requestedAt) < 60000) return Response.json({ sent: true, devCode: String(existing.hash || "").slice(0, 6) });
+    if (existing?.requestedAt && Date.now() - Number(existing.requestedAt) < 60000) {
+      return Response.json({ sent: true, ...(isLocalDevRuntime && existing.devCode ? { devCode: existing.devCode } : {}) });
+    }
 
     const code = String(randomInt(100000, 1000000));
-    await store.setJSON("login-code", { hash: hashLoginCode(code), expiresAt: Date.now() + 10 * 60 * 1000, requestedAt: Date.now(), attempts: 0 });
+    await store.setJSON("login-code", { hash: hashLoginCode(code), ...(isLocalDevRuntime ? { devCode: code } : {}), expiresAt: Date.now() + 10 * 60 * 1000, requestedAt: Date.now(), attempts: 0 });
 
     if (!apiKey || !from || !secret || !process.env.ADMIN_SESSION_SECRET) {
       if (isLocalDevRuntime) {
